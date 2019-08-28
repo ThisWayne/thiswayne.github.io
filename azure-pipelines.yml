@@ -25,8 +25,8 @@ steps:
 - script: |
     npm install
     npm install -g hexo-cli
-    git config --global url."git@github.com:".insteadOf "https://github.com/"
-    git config --global user.name "ThisWayne"
+    git config --global user.name "Azure DevOps"
     git config --global user.email "mail.chewei@gmail.com"
+    hexo config deploy.repository git@github.com:ThisWayne/thiswayne.github.io.git
     hexo deploy
   displayName: 'npm install and build, hexo deploy'
