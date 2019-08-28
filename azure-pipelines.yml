@@ -25,5 +25,7 @@ steps:
 - script: |
     npm install
     npm install -g hexo-cli
+    git config --global user.name "ThisWayne"
+    git config --global user.email "mail.chewei@gmail.com"
     hexo deploy
   displayName: 'npm install and build, hexo deploy'
