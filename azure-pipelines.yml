@@ -16,8 +16,8 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g hexo-cli
     npm install
+    npm install -g hexo-cli
     npm run build
   displayName: 'npm install and build'
 
