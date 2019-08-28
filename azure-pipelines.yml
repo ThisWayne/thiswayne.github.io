@@ -18,6 +18,5 @@ steps:
 - script: |
     npm install
     npm install -g hexo-cli
-    npm run build
     hexo d
   displayName: 'npm install and build, hexo deploy'
