@@ -11,6 +11,8 @@ This article is for helping someone who wants to practice algorithms on leetcode
 
 After solving some problems, I think some conceptual problems/solutions that once are understood, other problems are just the same. And without knowing these solutions, some problems are just not so easy to come up with a good solution.
 
+<!-- more -->
+
 ## Frequently Used Coding Tips, General Templates & Ideas
 
 ### 1. getting a bigger/smaller number
