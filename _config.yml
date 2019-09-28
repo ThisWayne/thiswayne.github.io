@@ -84,7 +84,7 @@ deploy:
   type: git
   repository: https://github.com/ThisWayne/thiswayne.github.io.git
   branch: master
-  message: \'Site updated':' \{\{ now(\'\') \}\}\'
+  message: "'Site updated: {{ now(\\'\\') }}'"
 
 marked:
   smartypants: false
