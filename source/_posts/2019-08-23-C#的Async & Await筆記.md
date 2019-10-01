@@ -1,7 +1,7 @@
 ---
 title: 'C#的Async & Await筆記'
 date: 2019-08-23 17:51:46
-urlname: csharp-async-await
+urlname: csharp-async-await-note
 tags:
   - C#
 ---
