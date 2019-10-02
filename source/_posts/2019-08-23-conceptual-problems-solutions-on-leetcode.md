@@ -19,7 +19,7 @@ After solving some problems, I think some conceptual problems/solutions that onc
 
 instead of using if/else:
 
-```C#
+```csharp
 Math.Max(a, b)
 Math.Min(a, b)
 ```
@@ -31,7 +31,7 @@ If both of them are null, return true.
 Otherwise continue.  
 This snippet of code is so concise and beautiful, it gets rid of so much if/else.
 
-```C#
+```csharp
 if(a == null || b == null) {
     return a == b;
 }
@@ -39,7 +39,7 @@ if(a == null || b == null) {
 
 ### 3. BFS(Breath First Search) template
 
-```C#
+```csharp
 Queue<int> queue = new Queue<int>(); // choose Stack or Queue base on the problem
 while(queue.Count != 0) {
   int levelSize = queue.Count;
@@ -61,7 +61,7 @@ When visiting a node, usually there are three things we can do, base on the prob
 
 Iterate each item in an array from start to end again and again without worrying the index out of bound problem at the end of the array.
 
-```C#
+```csharp
 index = (index + 1) % length;
 index = (index + length - 1) % length; // iterate from end to start
 ```
@@ -74,7 +74,7 @@ Searching for something and the data is sorted or some math problem which is fro
 
 Avoid integer overflow when adding two large integer in binary search
 
-```C#
+```csharp
 // don't do this when left + right will overflow
 mid = (left + right) / 2
 // do this
@@ -91,7 +91,7 @@ In the Discuss page of the problem, some solution's code might looks concise by 
 
 ### [191. Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/)
 
-```C#
+```csharp
 // The basic solution is to iterate over bits by bit shifting (n >> 1) then check if rightmost bit is one (n & 1).
 // The trick here is that n & (n - 1) can eliminate the rightmost 1 in the n's binary bits, so it doesn't have to iterate all bits of n.
 // Now the time complexity is depends on how many of 1 in n, not how many bits of n.
@@ -111,7 +111,7 @@ public class Solution {
 
 ### [448. Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/)
 
-```C#
+```csharp
 // If modifying the iput array is allowed, we can use some trick to manipulate the array to solve some problem without extra space.
 // Like using positive/negative in the array to mark visited
 public class Solution {
@@ -137,7 +137,7 @@ public class Solution {
 
 ### [1. Two Sum](https://leetcode.com/problems/two-sum/)
 
-```C#
+```csharp
 // using key as distance to target, finding if there is a num equals to the distance to target
 public class Solution {
     public int[] TwoSum(int[] nums, int target) {
@@ -158,7 +158,7 @@ public class Solution {
 
 ### [704. Binary Search](https://leetcode.com/problems/binary-search/)
 
-```C#
+```csharp
 public class Solution {
     public int Search(int[] nums, int target) {
         int n = nums.Length;
@@ -180,7 +180,7 @@ public class Solution {
 
 ### [744. Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
 
-```C#
+```csharp
 public class Solution {
     public char NextGreatestLetter(char[] letters, char target) {
         int n = letters.Length;
@@ -203,7 +203,7 @@ public class Solution {
 
 ### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
 
-```C#
+```csharp
 public class Solution {
     public int MinDepth(TreeNode root) {
         if(root == null) return 0;
@@ -231,7 +231,7 @@ public class Solution {
 
 ### [83. Remove Duplicates from Sorted List](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
 
-```C#
+```csharp
 public class Solution {
     public ListNode DeleteDuplicates(ListNode head) {
         if(head == null) return head;
@@ -252,7 +252,7 @@ public class Solution {
 
 ### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
 
-```C#
+```csharp
 public class Solution {
     public bool HasCycle(ListNode head) {
         if (head == null || head.next == null) {
@@ -278,7 +278,7 @@ public class Solution {
 Using Floyd's cycle detection algoritm to solve this problem only takes O(1) space complexity.
 [Why Floyd's cycle detection algorithm works? Detecting loop in a linked list.](https://www.youtube.com/watch?v=LUm2ABqAs1w)
 
-```C#
+```csharp
 public class Solution {
     public ListNode DetectCycle(ListNode head) {
         if (head == null) return null;
@@ -304,7 +304,7 @@ public class Solution {
 
 ### [203. Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements/)
 
-```C#
+```csharp
 // using a dummy head to eliminate those null edge cases
 public class Solution {
     public ListNode RemoveElements(ListNode head, int val) {
@@ -325,7 +325,7 @@ public class Solution {
 
 ### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
 
-```C#
+```csharp
 public class Solution {
     public ListNode ReverseList(ListNode head) {
         ListNode prev = null;
@@ -363,7 +363,7 @@ public class Solution {
 
 ### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
 
-```C#
+```csharp
 public class Solution {
     public IList<IList<int>> Permute(int[] nums) {
         IList<IList<int>> result = new List<IList<int>>();
@@ -407,7 +407,7 @@ public class Solution {
 
 ### [303. Range Sum Query - Immutable](https://leetcode.com/problems/range-sum-query-immutable/)
 
-```C#
+```csharp
 // save every range from index 0 to index j
 // sum from index i to index j = range(0, j) - range(0, i)
 public class NumArray {
