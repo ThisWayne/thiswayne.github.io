@@ -3,8 +3,11 @@ title: Conceptual Problems/Solutions on Leetcode
 date: 2019-08-23 15:01:26
 urlname: conceptual-problems-solutions-on-leetcode
 tags:
-  - Algorithm
+  - Algorithms
   - Leetcode
+  - Conceptual Problems
+  - Coding Tips
+  - Code Templates
 ---
 
 This article is for helping someone who wants to practice algorithms on leetcode, and already has some basic data structure knowledge like hash table, stack, queue, etc.

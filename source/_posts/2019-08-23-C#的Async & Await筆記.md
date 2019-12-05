@@ -4,6 +4,7 @@ date: 2019-08-23 17:51:46
 urlname: csharp-async-await-note
 tags:
   - C#
+  - async&await
 ---
 
 最一開始學習C#的時候，搞不太清楚`async`/`await`實際上到底發生什麼事，有些人認為用`await`就是新增一個執行緒去執行一個`async method`，用多執行緒來平行處理的概念，但是又看到一般建議如果有用到`async`/`await`，最好就是all the way都用`async`/`await`，不要中間又用`Task.Result`等等不是`await`的方式，如果真的每寫一個`await`就是新增一條執行緒去執行，那all the way都是`await`不就占用超多條執行緒？
