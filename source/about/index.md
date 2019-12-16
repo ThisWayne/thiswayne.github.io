@@ -6,4 +6,10 @@ comments: false
 
 ## 經歷
 
-台北長大，台科電子工程系畢業，退伍後去過澳洲當過背包客一年半，回國後想要有寫程式的技能，於是開始自學寫程式，當過全端工程師三年多，寫過前端，後端，Android，一點Machine Learning跟CI/CD，平常喜歡聽音樂，已學習打爵士鼓一年多，運動比較常做的是跑步，喜歡閱讀科學、哲學、物理、音樂、商業、投資理財。
+台北長大，台科大電子工程系畢業，退伍後去過澳洲當過背包客一年半，回國後想要有寫程式的技能，於是開始自學寫程式，當過全端工程師三年多，寫過前端，後端，Android，一點Machine Learning跟CI/CD，平常喜歡聽音樂，已學習打爵士鼓一年多，運動比較常做的是跑步，喜歡閱讀科學、哲學、物理、音樂、商業、投資理財。
+
+## 其他
+
+[Facebook](https://www.facebook.com/wayne.chang.taipei)
+[Github](https://github.com/ThisWayne)
+[LinkedIn](www.linkedin.com/in/chewei)
