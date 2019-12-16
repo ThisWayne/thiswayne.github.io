@@ -12,4 +12,4 @@ comments: false
 
 [Facebook](https://www.facebook.com/wayne.chang.taipei)
 [Github](https://github.com/ThisWayne)
-[LinkedIn](www.linkedin.com/in/chewei)
+[LinkedIn](https://www.linkedin.com/in/chewei/)
