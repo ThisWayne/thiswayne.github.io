@@ -177,17 +177,17 @@ public Task<string> Method(...) {
 
 先知道兩點：
 
-1. 作業系統有signal的機制，可以不用靠一直問IO是否完成來知道狀態，而是當IO完成了透過signal來通知執行中的process該IO已經完成了。
+1. 一般硬體／作業系統有機制可以不用只靠執行緒一直問IO是否完成了來知道IO狀態，而是當IO完成了來通知process該IO已經完成了。
 
-2. thread pool裡面有`worker thread`、`IOCP thread`兩種
+2. thread pool裡面有`worker thread`、`IOCP thread`兩種。
 
 從上層一點來說，當呼叫了一個IO操作，會取得一個`Task`，此時IO已經開始執行，當執行到`await task`，如果`Task`還沒完成，當前執行緒會跳回到caller端，如果`Task`已經完成，則會直接繼續執行。
 
-`await`後續還未完成的部分，會在實際IO結束完成後，透過IOCP(Input Output Completion Port)的機制，由`IOCP thread`來接手，如果是有SynchronizationContext(通常有UI的像是WinForm, WPF都有)，會以`SynchroniztionContext.Post`的方式丟給UI thread去執行，如果有加上`ConfigureAwait(false)`則會由`IOCP thread`繼續執行，所以如果`await`後有CPU bound的工作要做，建議另用thread pool裡面的`worker thread`來執行。
+`await`後續還未完成的部分，會在實際IO結束完成後，透過IOCP(Input Output Completion Port)的機制，由`IOCP thread`來接手，如果是有SynchronizationContext(通常有UI的像是WinForm, WPF都有)，會以`SynchroniztionContext.Post`的方式丟給UI thread去執行`await`後續的程式，如果有加上`ConfigureAwait(false)`則由當前`IOCP thread`繼續執行。
 
 compiler在compile的時候看到`await`實際上有做一些手腳，程式執行到`await`這邊會先去看`Task`是不是已經完成了（fast path優化），如果已經完成了則沒必要透過額外的`await`機制增加負擔，而是直接繼續執行就可以了，所以程式碼上`await`後續執行的thread也是有可能是原先的thread，還有些情況像是做測試就可以用`Task.FromResult`直接給一個完成了的`Task`可以省去額外的`await`負擔。
 
-非同步是一個目的，多執行緒是一種達成方式，但不是唯一的達成方式。過程中主執行緒在IO等待期間沒有閒置也一直繼續執行不倚賴IO結果的程式，而當IO完成了，`await`後續的程式是由thread pool裡面的`IOCP thread`來接手，沒有執行緒空等，過程中沒有額外的新增執行緒，全靠原本thread pool的機制在管理執行緒數量。不依賴IO結果的程式與等待IO非同步的在進行。
+非同步是一個目的，多執行緒是一種達成方式，但不是唯一的達成方式。過程中主執行緒在IO等待期間沒有閒置也一直繼續執行不倚賴IO結果的程式，而當IO完成了，`await`後續的程式是由thread pool裡面的`IOCP thread`來接手，沒有執行緒空等，過程中沒有額外的新增執行緒，全靠原本thread pool的機制在管理執行緒數量。不依賴IO結果的程式與等待IO兩件工作非同步的在進行。
 
 參考  
 [Lucian Wischik - Async Part 1 — new feature in Visual Studio 11 for responsive programming.][]  
