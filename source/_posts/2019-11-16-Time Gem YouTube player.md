@@ -30,7 +30,7 @@ tags:
 
 ## 如果YouTube的JavaScript library可以調iframe裡面的YouTube播放器速度，我應該也可以自己寫個JavaScript調iframe裡面的播放器速度？
 
-本來一開始因為自己的程式有bug，透過YouTube的library一直控制不到速度，想說乾脆自己從iframe裡面DOM裡面抓video控制影片速度，順便學到了因為會有資安問題所以不能這樣硬幹，網頁與內嵌iframe網頁的溝通方法，要靠Window.postMessage，簡單來說就是網頁透過postMessage把資料傳給內嵌網頁，內嵌網頁透過message event接收資料，用chrome的話可以用monitorEvents(window, "message")在console來看兩邊溝通的log，以YouTube的情況來看，內嵌網頁會把可以呼叫的interface資訊提供給外面的網頁呼叫，只有他有定義的interface呼叫了有用。
+本來一開始因為自己的程式有bug，透過YouTube的library一直控制不到速度，想說乾脆自己從iframe裡面DOM裡面抓video控制影片速度，順便學到了因為會有資安問題所以不能這樣硬幹，網頁與內嵌iframe網頁的溝通方法，要靠`Window.postMessage`，簡單來說就是網頁透過`postMessage`把資料傳給內嵌網頁，內嵌網頁透過message event接收資料，用chrome的話可以用`monitorEvents(window, "message")`在console來看兩邊溝通的log，以YouTube的情況來看，內嵌網頁會把可以呼叫的interface資訊提供給外面的網頁呼叫，只有他有定義的interface呼叫了有用。
 
 ## 成品Demo
 
