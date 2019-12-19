@@ -15,6 +15,8 @@ tags:
 
 上一篇[C#的Async & Await筆記](../csharp-async-await-note/)有較多的概念
 
+這一篇的程式碼在這[csharp-lab](https://github.com/ThisWayne/csharp-lab)
+
 1. 一遇到`await`，執行緒不會馬上跳回到caller端，執行緒還是會往呼叫的methodAsync執行，直到最底層回傳一個`Task`，才開始依序跳回caller端，但如果`Task`已經是完成的狀態，則會省去原`await`機制，用原執行緒繼續執行。
 2. 一般`Task`不是已經完成的狀態下，遇到`await`，會優先看「當前」執行緒上有沒有`SynchronizationContext`，有則`await`後續的code會是原執行緒main thread來執行；沒有則`await`後續的code由thread pool裡面的執行緒執行。
 3. 一般`Task`不是已經完成的狀態下，遇到`await`加上`ConfigureAwait(false)`，則`await`後續的code會由thread pool裡面的執行緒執行。
@@ -39,11 +41,11 @@ tags:
 
 1. 寫了一個library project `TestClassLibrary`裡面放一個`AsyncAwaitTestClass.cs`，所有要跑的code都寫在裡面，可以給.NET Framework和.NET Core參照與使用
 2. 下面跑測試會個別跑，會先註解掉其他測試來讓執行測試的起始情況一致
-3. 測試有寫的四種project類型，測試上不一樣的地方主要是WPF的main thread有`SynchronizationContext`，其他測試上的差別只有起始thread是像WPF、Console App一樣是main thread，還是像web server是調用worker thread的差別
-4. 因為有無`SynchronizationContext`，基本上只會有兩種不一樣的執行結果，下面只寫出WPF和.NET Core的結果，想都執行看看還是可以抓回去玩玩看
+3. 測試有寫的四種project類型，測試上不一樣的地方主要是WPF的main thread有`SynchronizationContext`，其他測試上的差別只有起始thread像WPF、Console App是main thread，還是像web server是調用worker thread的差別
+4. 因為有無`SynchronizationContext`，基本上只會有兩種較不一樣的執行結果，下面只寫出WPF和.NET Core的結果，想執行看看都還是可以抓回去玩玩看
 5. 印出測試訊息用`Debug.WriteLine`寫在output讓不同的project類型都會在同一個地方印出來，會透過執行`AsyncAwaitTestClass.PrintInfos`印出執行的當下有多少worker threads、iocp threads、total threads，印出當下執行緒的`SynchronizationContext`、`ManagedThreadId`、`IsThreadPoolThread`。
 
-```csharp PrintInfos() https://github.com/ThisWayne/csharp-lab/blob/master/AsyncAwaitTest/TestClassLibrary/AsyncAwaitTestClass.cs#L36-L51 AsyncAwaitTestClass.cs#L36-L51
+```csharp
 private void PrintInfos()
 {
     ThreadPool.GetMaxThreads(out int maxWorkerThreads, out int maxCompletionPortThreads);
@@ -62,7 +64,7 @@ private void PrintInfos()
 }
 ```
 
-## 測試一：執行續一遇到await就返回呼叫端？
+## 測試一：執行續一遇到`await`就返回呼叫端？
 
 ### (1)程式碼
 
@@ -128,9 +130,9 @@ private async Task RunTest1()
 }
 ```
 
-## 測試二：await加不加ConfigureAwait(false)會發生什麼事，後續執行緒是？
+## 測試二：`await`加不加`ConfigureAwait(false)`會發生什麼事，後續執行緒是？
 
-### (2.1)不加ConfigureAwait(false)
+### (2.1)不加`ConfigureAwait(false)`
 
 #### (2.1)程式碼
 
@@ -197,7 +199,7 @@ private async Task RunTest2_1()
      IsThreadPoolThread: True
 ```
 
-### (2.2)加ConfigureAwait(false)
+### (2.2)加`ConfigureAwait(false)`
 
 #### (2.2)程式碼
 
@@ -260,7 +262,7 @@ private async Task RunTest2_2()
      IsThreadPoolThread: True
 ```
 
-### (2.3)加ConfigureAwait(false)後面一定會是iocp thread？
+### (2.3)加`ConfigureAwait(false)`後面一定會是iocp thread？
 
 #### (2.3)程式碼
 
@@ -337,7 +339,7 @@ private async Task RunTest2_3()
      IsThreadPoolThread: True
 ```
 
-### (2.4)連續兩個await呼叫有加ConfigureAwait(false)
+### (2.4)連續兩個`await`呼叫有加`ConfigureAwait(false)`
 
 #### (2.4)程式碼
 
@@ -349,12 +351,12 @@ private async Task RunTest2_4()
     Debug.WriteLine("1. === Before httpClient.GetStringAsync ===");
     PrintInfos();
 
-    await httpClient.GetStringAsync(url).ConfigureAwait(false);
+    await httpClient.GetStringAsync(url).ConfigureAwait(false); // with ConfigureAwait(false)
 
     Debug.WriteLine("2. === After httpClient.GetStringAsync ConfigureAwait(false) ===");
     PrintInfos();
 
-    await httpClient.GetStringAsync(url).ConfigureAwait(false);
+    await httpClient.GetStringAsync(url).ConfigureAwait(false); // with ConfigureAwait(false)
 
     Debug.WriteLine("3. === After httpClient.GetStringAsync ConfigureAwait(false) ===");
     PrintInfos();
@@ -417,7 +419,7 @@ private async Task RunTest2_4()
      IsThreadPoolThread: True
 ```
 
-### (2.5)先呼叫一個await有加ConfigureAwait(false)，然後再呼叫一個await不加ConfigureAwait(false)？
+### (2.5)先呼叫一個`await`有加`ConfigureAwait(false)`，然後再呼叫一個`await`不加`ConfigureAwait(false)`？
 
 #### (2.5)程式碼
 
@@ -434,7 +436,7 @@ private async Task RunTest2_5()
     Debug.WriteLine("2. === After httpClient.GetStringAsync ConfigureAwait(false) ===");
     PrintInfos();
 
-    await httpClient.GetStringAsync(url);
+    await httpClient.GetStringAsync(url); // without ConfigureAwait(false)
 
     Debug.WriteLine("3. === After httpClient.GetStringAsync ===");
     PrintInfos();
@@ -497,7 +499,7 @@ WPF的第一個`httpClient.GetStringAsync`有加`ConfigureAwait(false)`，所以
      IsThreadPoolThread: True
 ```
 
-### (2.6)裡面的有加，外面的沒加ConfigureAwait(false)
+### (2.6)外面的沒加`ConfigureAwait(false)`，裡面的有加
 
 #### (2.6)程式碼
 
@@ -595,7 +597,7 @@ private async Task<string> MethodWithConfigureAwaitFalseInsideAsync()
      IsThreadPoolThread: True
 ```
 
-### (2.7)外面的有加，裡面的沒加ConfigureAwait(false)
+### (2.7)外面的有加`ConfigureAwait(false)`，裡面的沒加
 
 #### (2.7)程式碼
 
@@ -629,7 +631,7 @@ private async Task<string> MethodWithoutConfigureAwaitFalseInsideAsync()
 
 #### (2.7)執行結果
 
-WPF因為裡面的沒加ConfigureAwait(false)，所以`await`後續接手會是main thread，裡面最後執行完的是main thread，外層的有加ConfigureAwait(false)，不交由main thread執行`ConfigureAwait(false)`的後續，所以由worker thread接手
+WPF因為裡面的沒加`ConfigureAwait(false)`，所以`await`後續接手會是main thread，裡面最後執行完的是main thread，外層的有加`ConfigureAwait(false)`，不交由main thread執行`ConfigureAwait(false)`的後續，所以由worker thread接手
 
 ##### (2.7)WPF
 
@@ -695,7 +697,7 @@ WPF因為裡面的沒加ConfigureAwait(false)，所以`await`後續接手會是m
 
 ## 測試三：承測試二，如果不跑在IO相關的task，而跑在`Task.Delay`上，後續執行緒是？
 
-### (3.1)不加ConfigureAwait(false)
+### (3.1)不加`ConfigureAwait(false)`
 
 #### (3.1)程式碼
 
@@ -758,7 +760,7 @@ private async Task RunTest3_1()
      IsThreadPoolThread: True
 ```
 
-### (3.2)加ConfigureAwait(false)
+### (3.2)加`ConfigureAwait(false)`
 
 #### (3.2)程式碼
 
@@ -823,4 +825,6 @@ private async Task RunTest3_2()
 
 ## 程式碼source code
 
-[csharp-lab](https://github.com/ThisWayne/csharp-lab)
+[csharp-lab][]
+
+[csharp-lab]: https://github.com/ThisWayne/csharp-lab
