@@ -17,6 +17,8 @@ tags:
 
 ## TL;DR，細節懶得看只想先知道怎麼做
 
+下一篇[C#的Async & Await筆記(2)](../csharp-async-await-note-2/)有程式碼可以玩玩看
+
 1. 平行執行`Task`
 
    多個`MethodAsync`呼叫可以先持有各method回傳的`Task`，做其他事情，然後真正需要倚賴`Task`的結果時再用`await`依據結果繼續執行。
