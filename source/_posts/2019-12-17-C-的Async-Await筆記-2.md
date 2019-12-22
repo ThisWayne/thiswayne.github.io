@@ -45,7 +45,7 @@ tags:
 4. 因為有無`SynchronizationContext`，基本上只會有兩種較不一樣的執行結果，下面只寫出WPF和.NET Core的結果，想執行看看都還是可以抓回去玩玩看
 5. 印出測試訊息用`Debug.WriteLine`寫在output讓不同的project類型都會在同一個地方印出來，會透過執行`AsyncAwaitTestClass.PrintInfos`印出執行的當下有多少worker threads、iocp threads、total threads，印出當下執行緒的`SynchronizationContext`、`ManagedThreadId`、`IsThreadPoolThread`。
 
-```csharp
+```csharp C#
 private void PrintInfos()
 {
     ThreadPool.GetMaxThreads(out int maxWorkerThreads, out int maxCompletionPortThreads);
@@ -68,7 +68,7 @@ private void PrintInfos()
 
 ### (1)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest1()
 {
     Debug.WriteLine("===== Test 1 =====");
@@ -116,7 +116,7 @@ private async Task<int> ReturnFinishedTaskAsync()
 可以在output上看到`RunTest1`的`1.`跟`ReturnFinishedTaskAsync`裡面的`2.`都是同一個thread ID，四種project結果都一樣。
 其實想成下面這樣，程式是一樣的，應該就直覺async method裡面也會是同一個thread先執行。
 
-```csharp
+```csharp C#
 private async Task RunTest1()
 {
     Debug.WriteLine("===== Test 1 =====");
@@ -136,7 +136,7 @@ private async Task RunTest1()
 
 #### (2.1)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_1()
 {
     Debug.WriteLine("===== Test 2.1 =====");
@@ -203,7 +203,7 @@ private async Task RunTest2_1()
 
 #### (2.2)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_2()
 {
     Debug.WriteLine("===== Test 2.2 =====");
@@ -266,7 +266,7 @@ private async Task RunTest2_2()
 
 #### (2.3)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_3()
 {
     Debug.WriteLine("===== Test 2.3 =====");
@@ -343,7 +343,7 @@ private async Task RunTest2_3()
 
 #### (2.4)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_4()
 {
     Debug.WriteLine("===== Test 2.4 =====");
@@ -423,7 +423,7 @@ private async Task RunTest2_4()
 
 #### (2.5)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_5()
 {
     Debug.WriteLine("===== Test 2.5 =====");
@@ -503,7 +503,7 @@ WPF的第一個`httpClient.GetStringAsync`有加`ConfigureAwait(false)`，所以
 
 #### (2.6)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_6()
 {
     Debug.WriteLine("===== Test 2.6 =====");
@@ -601,7 +601,7 @@ private async Task<string> MethodWithConfigureAwaitFalseInsideAsync()
 
 #### (2.7)程式碼
 
-```csharp
+```csharp C#
 private async Task RunTest2_7()
 {
     Debug.WriteLine("===== Test 2.7 =====");
@@ -701,7 +701,7 @@ WPF因為裡面的沒加`ConfigureAwait(false)`，所以`await`後續接手會�
 
 #### (3.1)程式碼
 
-```text
+```csharp C#
 private async Task RunTest3_1()
 {
     Debug.WriteLine("===== Test 3.1 =====");
@@ -764,7 +764,7 @@ private async Task RunTest3_1()
 
 #### (3.2)程式碼
 
-```text
+```csharp C#
 private async Task RunTest3_2()
 {
     Debug.WriteLine("===== Test 3.2 =====");

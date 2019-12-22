@@ -36,8 +36,7 @@ tags:
 當持有回傳的`Task`時，實際上`Task`的內容已經開始執行。
 可以的話先開始執行耗時的`async method`，再執行其他不倚賴剛才`async method`結果的運算，一定需要`async method`的結果時再用`await`。
 
-```csharp
-// C#
+```csharp C#
 // 下面這一行會建立並開始一個Task
 var myTask = someWebAccessMethodAsync(url);
 
@@ -49,8 +48,7 @@ var result = await myTask;
 
 有多個`async method`先取得各個`Task`，如此各個`async method`即開始處理，在需要結果的時候再用`await`。
 
-```csharp
-// C#
+```csharp C#
 Task<int> download1 =
     ProcessURLAsync("https://msdn.microsoft.com", client);
 
@@ -75,8 +73,7 @@ int length3 = await download3;
 
 呼叫端沒辦法知道`async method`什麼時候工作結束，可能導致race condition，下面案例line A和line B被執行到的順序不一定，有可能經過了2秒line B還沒完成，line A就先往下印出`m_GetResponse`。
 
-```csharp
-// C#
+```csharp C#
 private async void Button1_Click(object Sender, EventArgs e) {
     try {
         SendData("https://secure.flickr.com/services/oauth/request_token");
@@ -98,8 +95,7 @@ private async void SendData(string Url) {
 
 `async void`會fire and forget，預期的`try`/`catch`會抓不到exception。
 
-```csharp
-// C#
+```csharp C#
 private async void Button1_Click(object Sender, EventArgs e) {
     try {
         SendData("https://secure.flickr.com/services/oauth/request_token");
@@ -125,8 +121,7 @@ private async void SendData(string Url) {
 
 上述程式比較好的寫法
 
-```csharp
-// C#
+```csharp C#
 private async void Button1_Click(object Sender, EventArgs e) {
     try {
         m_GetResponse = await SendDataAsync("https://secure.flickr.com/services/oauth/request_token");
@@ -151,8 +146,7 @@ private async Task<string> SendDataAsync(string Url) {
 
 ## 3. 沒真的需要用`await`，可以不用`return await MethodAsync(...)`，直接傳回給呼叫端`Task`
 
-```csharp
-// C#
+```csharp C#
 // 多餘的async和await
 public async Task<string> Method(...) {
     // 中間做一些不用await的事
