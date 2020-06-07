@@ -101,7 +101,7 @@ If you can't measure it, you can't improve it.
 
 ## 公司的成功會很大的影響個人的成功
 
-Andy Rachleff: You get more credit than you deserve for being part of a successful company, and less credit than you deserve for bein part of an unsuccessful company
+Andy Rachleff: You get more credit than you deserve for being part of a successful company, and less credit than you deserve for being part of an unsuccessful company
 
 ## 如何循序的改善面試流程
 
