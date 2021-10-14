@@ -28,6 +28,12 @@ Math.Max(a, b)
 Math.Min(a, b)
 ```
 
+```python
+# Python
+max(a, b)
+min(a, b)
+```
+
 ### 2. check if two variables are null
 
 If a or b is null, return false.  
@@ -42,6 +48,12 @@ if(a == null || b == null) {
 }
 ```
 
+```python
+# Python
+if(a is None or b is None):
+    return a == b
+```
+
 ### 3. BFS(Breath First Search) template
 
 ```csharp
@@ -53,6 +65,26 @@ while(queue.Count != 0) {
       // do something like enqueue, dequeue...
   }
 }
+```
+
+```python
+# Python
+# choose Stack or Queue base on the problem
+from collections import deque
+
+queue = deque() 
+while(len(stack) != 0):
+    level_size = len(queue)
+    while(level_size > 0)
+        # queue.append(x), queue.popleft()
+        level_size -= 1
+
+stack = []
+while(len(stack) != 0):
+    level_size = len(stack)
+    while(level_size > 0)
+        # stack.pop(), stack.append(x)
+        level_size -= 1
 ```
 
 ### 4. binary tree solution template
@@ -71,6 +103,13 @@ Iterate each item in an array from start to end again and again without worrying
 // C#
 index = (index + 1) % length;
 index = (index + length - 1) % length; // iterate from end to start
+```
+
+```python
+# Python
+length = len(arr)
+index = (index + 1) % length
+index = (index + length - 1) % length; # iterate from end to start
 ```
 
 ### 6. sorted data
