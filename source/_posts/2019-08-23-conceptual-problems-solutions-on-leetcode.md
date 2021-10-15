@@ -72,7 +72,7 @@ while(queue.Count != 0) {
 # choose Stack or Queue base on the problem
 from collections import deque
 
-queue = deque() 
+queue = deque()
 while(len(stack) != 0):
     level_size = len(queue)
     while(level_size > 0)
@@ -155,6 +155,17 @@ public class Solution {
 }
 ```
 
+```python
+# Python
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        count = 0
+        while n != 0:
+            n = n & (n - 1)
+            count += 1
+        return count
+```
+
 ## Array
 
 ### [448. Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/)
@@ -180,6 +191,22 @@ public class Solution {
         return result;
     }
 }
+```
+
+```python
+# Python
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(0, len(nums)):
+            index = abs(nums[i]) - 1
+            if nums[index] > 0:
+                nums[index] = -nums[index]
+        
+        result = []
+        for i in range(0, len(nums)):
+            if nums[i] > 0:
+                result.append(i + 1)
+        return result
 ```
 
 ## Key/Value
