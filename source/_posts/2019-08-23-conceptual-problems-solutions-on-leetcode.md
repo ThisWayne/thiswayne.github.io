@@ -361,9 +361,11 @@ class Solution:
         curr_depth = 0
         nodes = deque()
         nodes.append(root)
+
         while len(nodes) != 0:
             level_size = len(nodes)
             curr_depth += 1
+
             for i in range(level_size):
                 node = nodes.popleft()
                 if node:
@@ -496,6 +498,33 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if head is None or head.next is None:
+            return None
+        
+        slow = head
+        fast = head
+        
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                fast = head
+                while slow != fast:
+                    slow = slow.next
+                    fast = fast.next
+                return fast
+        return None
+```
+
 ### [203. Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements/)
 
 ```csharp
@@ -518,6 +547,26 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        dummy_head = ListNode(0)
+        dummy_head.next = head
+        
+        curr = dummy_head
+        while curr is not None and curr.next is not None:
+            if curr.next.val == val:
+                curr.next = curr.next.next
+            else:
+                curr = curr.next
+        return dummy_head.next
+```
+
 ### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
 
 ```csharp
@@ -535,6 +584,24 @@ public class Solution {
         return prev;
     }
 }
+```
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev = None
+        curr = head
+        while curr is not None:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        return prev
 ```
 
 ## Sliding Window
