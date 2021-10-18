@@ -624,8 +624,6 @@ class Solution:
 
 ### [46. Permutations](https://leetcode.com/problems/permutations/)
 
-### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
-
 ```csharp
 // C#
 public class Solution {
@@ -658,6 +656,8 @@ public class Solution {
     }
 }
 ```
+
+### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
 
 ### [784. Letter Case Permutation](https://leetcode.com/problems/letter-case-permutation/)
 
