@@ -28,6 +28,12 @@ Math.Max(a, b)
 Math.Min(a, b)
 ```
 
+```python
+# Python
+max(a, b)
+min(a, b)
+```
+
 ### 2. check if two variables are null
 
 If a or b is null, return false.  
@@ -42,6 +48,12 @@ if(a == null || b == null) {
 }
 ```
 
+```python
+# Python
+if a is None or b is None:
+    return a == b
+```
+
 ### 3. BFS(Breath First Search) template
 
 ```csharp
@@ -53,6 +65,26 @@ while(queue.Count != 0) {
       // do something like enqueue, dequeue...
   }
 }
+```
+
+```python
+# Python
+# choose Stack or Queue base on the problem
+from collections import deque
+
+queue = deque()
+while len(queue) != 0:
+    level_size = len(queue)
+    while level_size > 0:
+        # queue.append(x), queue.popleft()
+        level_size -= 1
+
+stack = []
+while len(stack) != 0:
+    level_size = len(stack)
+    while level_size > 0:
+        # stack.pop(), stack.append(x)
+        level_size -= 1
 ```
 
 ### 4. binary tree solution template
@@ -71,6 +103,13 @@ Iterate each item in an array from start to end again and again without worrying
 // C#
 index = (index + 1) % length;
 index = (index + length - 1) % length; // iterate from end to start
+```
+
+```python
+# Python
+length = len(arr)
+index = (index + 1) % length
+index = (index + length - 1) % length; # iterate from end to start
 ```
 
 ### 6. sorted data
@@ -116,6 +155,17 @@ public class Solution {
 }
 ```
 
+```python
+# Python
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        count = 0
+        while n != 0:
+            n = n & (n - 1)
+            count += 1
+        return count
+```
+
 ## Array
 
 ### [448. Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/)
@@ -143,6 +193,22 @@ public class Solution {
 }
 ```
 
+```python
+# Python
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(0, len(nums)):
+            index = abs(nums[i]) - 1
+            if nums[index] > 0:
+                nums[index] = -nums[index]
+
+        result = []
+        for i in range(0, len(nums)):
+            if nums[i] > 0:
+                result.append(i + 1)
+        return result
+```
+
 ## Key/Value
 
 ### [1. Two Sum](https://leetcode.com/problems/two-sum/)
@@ -163,6 +229,18 @@ public class Solution {
         return new int[2];
     }
 }
+```
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        dict = {}
+        for (i, num) in enumerate(nums):
+            if num in dict:
+                return [dict[num], i]
+            else:
+                dict[target - num] = i
+        return []
 ```
 
 ## Binary Search
@@ -190,6 +268,19 @@ public class Solution {
 }
 ```
 
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = left + (right - left) // 2
+            num = nums[mid]
+            if num == target: return mid
+            elif num > target: right = mid - 1
+            else: left = mid + 1
+        return -1
+```
+
 ### [744. Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
 
 ```csharp
@@ -210,6 +301,19 @@ public class Solution {
         return letters[right];
     }
 }
+```
+
+```python
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        left, right = 0, len(letters) - 1
+        if target >= letters[right]: return letters[0]
+
+        while left < right:
+            mid = left + (right - left) // 2
+            if letters[mid] <= target: left = mid + 1
+            else: right = mid
+        return letters[right]
 ```
 
 ## Breath First Search
@@ -241,6 +345,37 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import deque
+
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if root is None: return 0
+
+        curr_depth = 0
+        nodes = deque()
+        nodes.append(root)
+
+        while len(nodes) != 0:
+            level_size = len(nodes)
+            curr_depth += 1
+
+            for i in range(level_size):
+                node = nodes.popleft()
+                if node:
+                    if node.left is None and node.right is None:
+                        return curr_depth
+                    nodes.append(node.left)
+                    nodes.append(node.right)
+        return curr_depth
+```
+
 ## Linked List
 
 ### [83. Remove Duplicates from Sorted List](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
@@ -265,10 +400,31 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None: return head
+
+        curr = head
+        while curr.next:
+            if curr.val == curr.next.val:
+                curr.next = curr.next.next
+            else:
+                curr = curr.next
+
+        return head
+```
+
 ### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 ```csharp
 // C#
+// Floyd's Tortoise and Hare
 public class Solution {
     public bool HasCycle(ListNode head) {
         if (head == null || head.next == null) {
@@ -287,6 +443,29 @@ public class Solution {
         return true;
     }
 }
+```
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if head is None or head.next is None:
+            return False
+
+        slow = head
+        fast = head.next
+
+        while slow != fast:
+            if fast is None or fast.next is None:
+                return False
+            slow = slow.next
+            fast = fast.next.next
+        return True
 ```
 
 ### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
@@ -319,6 +498,33 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if head is None or head.next is None:
+            return None
+
+        slow = head
+        fast = head
+
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                fast = head
+                while slow != fast:
+                    slow = slow.next
+                    fast = fast.next
+                return fast
+        return None
+```
+
 ### [203. Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements/)
 
 ```csharp
@@ -341,6 +547,26 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        dummy_head = ListNode(0)
+        dummy_head.next = head
+
+        curr = dummy_head
+        while curr is not None and curr.next is not None:
+            if curr.next.val == val:
+                curr.next = curr.next.next
+            else:
+                curr = curr.next
+        return dummy_head.next
+```
+
 ### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
 
 ```csharp
@@ -360,6 +586,24 @@ public class Solution {
 }
 ```
 
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev = None
+        curr = head
+        while curr is not None:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        return prev
+```
+
 ## Sliding Window
 
 [Sliding Window algorithm template to solve all the Leetcode substring search problem.](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
@@ -376,11 +620,9 @@ public class Solution {
 
 ## Permutation, Backtracking
 
-### [backtracking solution template](https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning))
+### [backtracking solution template](<https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning)>)
 
 ### [46. Permutations](https://leetcode.com/problems/permutations/)
-
-### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
 
 ```csharp
 // C#
@@ -415,6 +657,31 @@ public class Solution {
 }
 ```
 
+```python
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        self.backtracking(nums, 0, result)
+        return result
+
+    def backtracking(self, nums: List[int], start_index: int, result: List[List[int]]):
+        if start_index == len(nums):
+            result.append(list(nums))
+            return
+
+        for i in range(start_index, len(nums)):
+            self.swap(nums, start_index, i)
+            self.backtracking(nums, start_index + 1, result)
+            self.swap(nums, start_index, i)
+
+    def swap(self, nums: List[int], index_a: int, index_b: int):
+        temp = nums[index_a]
+        nums[index_a] = nums[index_b]
+        nums[index_b] = temp
+```
+
+### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
+
 ### [784. Letter Case Permutation](https://leetcode.com/problems/letter-case-permutation/)
 
 ## Dynamic Programming
@@ -446,6 +713,25 @@ public class NumArray {
         return ranges[j + 1] - ranges[i];
     }
 }
+```
+
+```python
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.__ranges = [0]
+        sum = 0
+        for (i, num) in enumerate(nums):
+            self.__ranges.append(sum + num)
+            sum += num
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.__ranges[right + 1] - self.__ranges[left]
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# param_1 = obj.sumRange(left,right)
 ```
 
 ### [413. Arithmetic Slices](https://leetcode.com/problems/arithmetic-slices/)
