@@ -357,7 +357,7 @@ from collections import deque
 class Solution:
     def minDepth(self, root: Optional[TreeNode]) -> int:
         if root is None: return 0
-        
+
         curr_depth = 0
         nodes = deque()
         nodes.append(root)
@@ -409,14 +409,14 @@ public class Solution {
 class Solution:
     def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
         if head is None: return head
-        
+
         curr = head
         while curr.next:
             if curr.val == curr.next.val:
                 curr.next = curr.next.next
             else:
                 curr = curr.next
-        
+
         return head
 ```
 
@@ -456,10 +456,10 @@ class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         if head is None or head.next is None:
             return False
-        
+
         slow = head
         fast = head.next
-        
+
         while slow != fast:
             if fast is None or fast.next is None:
                 return False
@@ -509,10 +509,10 @@ class Solution:
     def detectCycle(self, head: ListNode) -> ListNode:
         if head is None or head.next is None:
             return None
-        
+
         slow = head
         fast = head
-        
+
         while fast is not None and fast.next is not None:
             slow = slow.next
             fast = fast.next.next
@@ -557,7 +557,7 @@ class Solution:
     def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
         dummy_head = ListNode(0)
         dummy_head.next = head
-        
+
         curr = dummy_head
         while curr is not None and curr.next is not None:
             if curr.next.val == val:
@@ -657,6 +657,29 @@ public class Solution {
 }
 ```
 
+```python
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        self.backtracking(nums, 0, result)
+        return result
+
+    def backtracking(self, nums: List[int], start_index: int, result: List[List[int]]):
+        if start_index == len(nums):
+            result.append(list(nums))
+            return
+
+        for i in range(start_index, len(nums)):
+            self.swap(nums, start_index, i)
+            self.backtracking(nums, start_index + 1, result)
+            self.swap(nums, start_index, i)
+
+    def swap(self, nums: List[int], index_a: int, index_b: int):
+        temp = nums[index_a]
+        nums[index_a] = nums[index_b]
+        nums[index_b] = temp
+```
+
 ### [1079. Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)
 
 ### [784. Letter Case Permutation](https://leetcode.com/problems/letter-case-permutation/)
@@ -690,6 +713,25 @@ public class NumArray {
         return ranges[j + 1] - ranges[i];
     }
 }
+```
+
+```python
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.__ranges = [0]
+        sum = 0
+        for (i, num) in enumerate(nums):
+            self.__ranges.append(sum + num)
+            sum += num
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.__ranges[right + 1] - self.__ranges[left]
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# param_1 = obj.sumRange(left,right)
 ```
 
 ### [413. Arithmetic Slices](https://leetcode.com/problems/arithmetic-slices/)
