@@ -78,9 +78,40 @@ for key, value in room_num.items():
 
 ## Set
 
+```python
+num_set = set()
+num_set.add(1)
+num_set.add(2)
+
+print(2 in num_set)
+print(3 in num_set)
+```
+
 ## Queue
 
+```python
+from collections import deque
+
+nums = deque()
+nums.append(1)
+nums.append(2)
+
+print(nums.popleft())
+print(nums.popleft())
+```
+
 ## Stack
+
+```python
+stack = []
+
+stack.append('a')
+stack.append('b')
+stack.append('c')
+
+print(stack.pop())
+print(stack.pop())
+```
 
 ## PriorityQueue
 
