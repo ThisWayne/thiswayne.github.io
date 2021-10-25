@@ -14,9 +14,67 @@ tags:
 
 ## Language
 
-## Iterate array
+```python
+a, b, c = True, False, None
+
+if b:
+  print("hello1")
+elif b is None:
+  print("hello2")
+else:
+  print("hello3")
+
+while a:
+  print("a")
+  a = False
+print(6/3) # 2.0
+print(6//3) # 2
+```
+
+## String
+
+```python
+message = "hello"
+print(len(message))
+```
+
+## Iterate array, for loop
+
+```python
+nums = [10, 20, 30]
+nums.append(40)
+
+for num in nums:
+  print(num)
+
+for index, num in enumerate(nums):
+  print(index, num)
+
+for i in range(0, 5):
+  print(i) # 0, 1, 2, 3, 4
+
+for i in range(0, 5, 2):
+  print(i) # 0, 2, 4
+```
 
 ## HashMap
+
+```python
+room_num = {'john': 100, 'tom': 200}
+room_num['john'] = 201
+
+print(room_num['tom'])
+print(room_num.keys())
+
+if 'john' in room_num:
+  print('john in room')
+
+for key in room_num:
+  print(key)
+
+for key, value in room_num.items():
+  print key, value
+```
 
 ## Set
 

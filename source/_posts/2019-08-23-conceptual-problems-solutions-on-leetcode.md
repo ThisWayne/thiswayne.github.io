@@ -666,7 +666,7 @@ class Solution:
 
     def backtracking(self, nums: List[int], start_index: int, result: List[List[int]]):
         if start_index == len(nums):
-            result.append(list(nums))
+            result.append(nums[:])
             return
 
         for i in range(start_index, len(nums)):
