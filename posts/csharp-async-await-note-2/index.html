@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/uploads/logo.png?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: 'search.xml'
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    }
+  };
+</script>
+
+  <meta name="description" content="既上一篇的一些觀念，來寫一些程式來實際驗證一下C#不同類型的專案上async/await跑起來會怎麼運作，執行緒會怎麼樣調用。">
+<meta name="keywords" content="C#,async&amp;await">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#的Async &amp; Await筆記(2)">
+<meta property="og:url" content="https://thiswayne.github.io/posts/csharp-async-await-note-2/index.html">
+<meta property="og:site_name" content="This Wayne">
+<meta property="og:description" content="既上一篇的一些觀念，來寫一些程式來實際驗證一下C#不同類型的專案上async/await跑起來會怎麼運作，執行緒會怎麼樣調用。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2022-12-04T09:14:49.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C#的Async &amp; Await筆記(2)">
+<meta name="twitter:description" content="既上一篇的一些觀念，來寫一些程式來實際驗證一下C#不同類型的專案上async/await跑起來會怎麼運作，執行緒會怎麼樣調用。">
+  <link rel="alternate" href="/atom.xml" title="This Wayne" type="application/atom+xml">
+  <link rel="canonical" href="https://thiswayne.github.io/posts/csharp-async-await-note-2/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>C#的Async & Await筆記(2) | This Wayne</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146129627-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-146129627-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">This Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-search">
+          <a href="javascript:;" class="popup-trigger">
+          
+            <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+    </div>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://thiswayne.github.io/posts/csharp-async-await-note-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="This Wayne">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="This Wayne">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">C#的Async & Await筆記(2)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-12-17 22:36:22" itemprop="dateCreated datePublished" datetime="2019-12-17T22:36:22+00:00">2019-12-17</time>
+            </span>
+          
+
+          
+            
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="fa fa-comment-o"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Comments: </span>
+    
+  
+    <a href="/posts/csharp-async-await-note-2/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/csharp-async-await-note-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          <br>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>既上一篇的一些觀念，來寫一些程式來實際驗證一下C#不同類型的專案上<code>async</code>/<code>await</code>跑起來會怎麼運作，執行緒會怎麼樣調用。</p>
+<a id="more"></a>
+
+<h2 id="TL-DR，執行緒調用方式"><a href="#TL-DR，執行緒調用方式" class="headerlink" title="TL;DR，執行緒調用方式"></a>TL;DR，執行緒調用方式</h2><p>上一篇<a href="../csharp-async-await-note/">C#的Async &amp; Await筆記</a>有較多的概念</p>
+<p>這一篇的程式碼在這<a href="https://github.com/ThisWayne/csharp-lab" target="_blank" rel="noopener">csharp-lab</a></p>
+<ol>
+<li>一遇到<code>await</code>，執行緒不會馬上跳回到caller端，執行緒還是會往呼叫的methodAsync執行，直到最底層回傳一個<code>Task</code>，才開始依序跳回caller端，但如果<code>Task</code>已經是完成的狀態，則會省去原<code>await</code>機制，用原執行緒繼續執行。</li>
+<li>一般<code>Task</code>不是已經完成的狀態下，遇到<code>await</code>，會優先看「當前」執行緒上有沒有<code>SynchronizationContext</code>，有則<code>await</code>後續的code會是原執行緒main thread來執行；沒有則<code>await</code>後續的code由thread pool裡面的執行緒執行。</li>
+<li>一般<code>Task</code>不是已經完成的狀態下，遇到<code>await</code>加上<code>ConfigureAwait(false)</code>，則<code>await</code>後續的code會由thread pool裡面的執行緒執行。</li>
+</ol>
+<h2 id="執行環境"><a href="#執行環境" class="headerlink" title="執行環境"></a>執行環境</h2><h3 id="硬體"><a href="#硬體" class="headerlink" title="硬體"></a>硬體</h3><ul>
+<li>CPU：4 * Intel i7-6600U 2.6GHz</li>
+<li>RAM： 16.0 GB</li>
+<li>系統類型： x64</li>
+<li>作業系統：Windows 10</li>
+</ul>
+<h3 id="測試的project類型與target-framework"><a href="#測試的project類型與target-framework" class="headerlink" title="測試的project類型與target framework"></a>測試的project類型與target framework</h3><ul>
+<li>Console App： .NET Framework 4.6.1</li>
+<li>WPF： .NET Framework 4.6.1</li>
+<li>.NET Framework Web API： .NET Framework 4.6.1</li>
+<li>.NET Core Web API： .NET Core 2.1.1</li>
+</ul>
+<h2 id="測試方式"><a href="#測試方式" class="headerlink" title="測試方式"></a>測試方式</h2><ol>
+<li>寫了一個library project <code>TestClassLibrary</code>裡面放一個<code>AsyncAwaitTestClass.cs</code>，所有要跑的code都寫在裡面，可以給.NET Framework和.NET Core參照與使用</li>
+<li>下面跑測試會個別跑，會先註解掉其他測試來讓執行測試的起始情況一致</li>
+<li>測試有寫的四種project類型，測試上不一樣的地方主要是WPF的main thread有<code>SynchronizationContext</code>，其他測試上的差別只有起始thread像WPF、Console App是main thread，還是像web server是調用worker thread的差別</li>
+<li>因為有無<code>SynchronizationContext</code>，基本上只會有兩種較不一樣的執行結果，下面只寫出WPF和.NET Core的結果，想執行看看都還是可以抓回去玩玩看</li>
+<li>印出測試訊息用<code>Debug.WriteLine</code>寫在output讓不同的project類型都會在同一個地方印出來，會透過執行<code>AsyncAwaitTestClass.PrintInfos</code>印出執行的當下有多少worker threads、iocp threads、total threads，印出當下執行緒的<code>SynchronizationContext</code>、<code>ManagedThreadId</code>、<code>IsThreadPoolThread</code>。</li>
+</ol>
+<figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">PrintInfos</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ThreadPool.GetMaxThreads(<span class="keyword">out</span> <span class="keyword">int</span> maxWorkerThreads, <span class="keyword">out</span> <span class="keyword">int</span> maxCompletionPortThreads);</span><br><span class="line">    ThreadPool.GetAvailableThreads(<span class="keyword">out</span> <span class="keyword">int</span> workerThreads, <span class="keyword">out</span> <span class="keyword">int</span> completionPortThreads);</span><br><span class="line">    Debug.WriteLine(</span><br><span class="line">        <span class="string">"  -- Worker threads: &#123;0&#125;, Completion port threads: &#123;1&#125;, Total threads: &#123;2&#125;"</span>,</span><br><span class="line">        maxWorkerThreads - workerThreads,</span><br><span class="line">        maxCompletionPortThreads - completionPortThreads,</span><br><span class="line">        Process.GetCurrentProcess().Threads.Count</span><br><span class="line">    );</span><br><span class="line">    Debug.WriteLine(</span><br><span class="line">        <span class="string">$"     SynchronizationContext: <span class="subst">&#123;SynchronizationContext.Current&#125;</span>\n"</span> +</span><br><span class="line">        <span class="string">$"     ManagedThreadId: <span class="subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>\n"</span> +</span><br><span class="line">        <span class="string">$"     IsThreadPoolThread: <span class="subst">&#123;Thread.CurrentThread.IsThreadPoolThread&#125;</span>"</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="測試一：執行續一遇到await就返回呼叫端？"><a href="#測試一：執行續一遇到await就返回呼叫端？" class="headerlink" title="測試一：執行續一遇到await就返回呼叫端？"></a>測試一：執行續一遇到<code>await</code>就返回呼叫端？</h2><h3 id="1-程式碼"><a href="#1-程式碼" class="headerlink" title="(1)程式碼"></a>(1)程式碼</h3><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest1</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 1 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before ReturnFinishedTaskAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">    <span class="keyword">await</span> ReturnFinishedTaskAsync();</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 1 End ====="</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task&lt;<span class="keyword">int</span>&gt; <span class="title">ReturnFinishedTaskAsync</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"2.   === Begin MethodWithFinishedTask ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> Task.FromResult&lt;<span class="keyword">int</span>&gt;(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-執行結果"><a href="#1-執行結果" class="headerlink" title="(1)執行結果"></a>(1)執行結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 10</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test Start =====</span><br><span class="line">===== Test 1 =====</span><br><span class="line">1. === Before ReturnFinishedTaskAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 10</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2.   === Begin MethodWithFinishedTask ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 10</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 1 End =====</span><br></pre></td></tr></table></figure>
+
+<p>不是一看到<code>await</code>，當前thread就跳回到caller，<code>await</code>裡面的code還是會先由當前thread執行，會直到執行到底層傳回task才「通常」開始一層一層返回caller。</p>
+<p>可以在output上看到<code>RunTest1</code>的<code>1.</code>跟<code>ReturnFinishedTaskAsync</code>裡面的<code>2.</code>都是同一個thread ID，四種project結果都一樣。<br>其實想成下面這樣，程式是一樣的，應該就直覺async method裡面也會是同一個thread先執行。</p>
+<figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest1</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 1 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before ReturnFinishedTaskAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">    <span class="keyword">var</span> task = ReturnFinishedTaskAsync(); <span class="comment">// 這裡把await分開來寫</span></span><br><span class="line">    <span class="keyword">await</span> task;</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 1 End ====="</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="測試二：await加不加ConfigureAwait-false-會發生什麼事，後續執行緒是？"><a href="#測試二：await加不加ConfigureAwait-false-會發生什麼事，後續執行緒是？" class="headerlink" title="測試二：await加不加ConfigureAwait(false)會發生什麼事，後續執行緒是？"></a>測試二：<code>await</code>加不加<code>ConfigureAwait(false)</code>會發生什麼事，後續執行緒是？</h2><h3 id="2-1-不加ConfigureAwait-false"><a href="#2-1-不加ConfigureAwait-false" class="headerlink" title="(2.1)不加ConfigureAwait(false)"></a>(2.1)不加<code>ConfigureAwait(false)</code></h3><h4 id="2-1-程式碼"><a href="#2-1-程式碼" class="headerlink" title="(2.1)程式碼"></a>(2.1)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_1</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.1 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url); <span class="comment">// without ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After httpClient.GetStringAsync  ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-1-執行結果"><a href="#2-1-執行結果" class="headerlink" title="(2.1)執行結果"></a>(2.1)執行結果</h4><h5 id="2-1-WPF"><a href="#2-1-WPF" class="headerlink" title="(2.1)WPF"></a>(2.1)WPF</h5><p>執行<code>httpClient.GetStringAsync</code>前後的code會是一樣的thread</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.1 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After httpClient.GetStringAsync  ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 28</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-1-NET-Core-Web-API"><a href="#2-1-NET-Core-Web-API" class="headerlink" title="(2.1).NET Core Web API"></a>(2.1).NET Core Web API</h5><p>執行<code>httpClient.GetStringAsync</code>前後的code是不一樣的thread，後面是iocp thread</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 16</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.1 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 16</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After httpClient.GetStringAsync  ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 24</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 22</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-加ConfigureAwait-false"><a href="#2-2-加ConfigureAwait-false" class="headerlink" title="(2.2)加ConfigureAwait(false)"></a>(2.2)加<code>ConfigureAwait(false)</code></h3><h4 id="2-2-程式碼"><a href="#2-2-程式碼" class="headerlink" title="(2.2)程式碼"></a>(2.2)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_2</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.2 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url).ConfigureAwait(<span class="literal">false</span>); <span class="comment">// with ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos(); <span class="comment">// 1. and 2. would be different thread ID</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-執行結果"><a href="#2-2-執行結果" class="headerlink" title="(2.2)執行結果"></a>(2.2)執行結果</h4><h5 id="2-2-WPF"><a href="#2-2-WPF" class="headerlink" title="(2.2)WPF"></a>(2.2)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 14</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.2 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 14</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 26</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2-NET-Core-Web-API"><a href="#2-2-NET-Core-Web-API" class="headerlink" title="(2.2).NET Core Web API"></a>(2.2).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.2 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-加ConfigureAwait-false-後面一定會是iocp-thread？"><a href="#2-3-加ConfigureAwait-false-後面一定會是iocp-thread？" class="headerlink" title="(2.3)加ConfigureAwait(false)後面一定會是iocp thread？"></a>(2.3)加<code>ConfigureAwait(false)</code>後面一定會是iocp thread？</h3><h4 id="2-3-程式碼"><a href="#2-3-程式碼" class="headerlink" title="(2.3)程式碼"></a>(2.3)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_3</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.3 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before ReturnFinishedTaskAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> ReturnFinishedTaskAsync().ConfigureAwait(<span class="literal">false</span>); <span class="comment">// with ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"3. === After ReturnFinishedTaskAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-執行結果"><a href="#2-3-執行結果" class="headerlink" title="(2.3)執行結果"></a>(2.3)執行結果</h4><p>如果跑的不是非同步IO當然不會是iocp thread</p>
+<p>如果<code>Task</code>已經是完成的狀態，則會省去原<code>await</code>機制，用原執行緒繼續執行</p>
+<h5 id="2-3-WPF"><a href="#2-3-WPF" class="headerlink" title="(2.3)WPF"></a>(2.3)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.3 =====</span><br><span class="line">1. === Before ReturnFinishedTaskAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2.   === Begin MethodWithFinishedTask ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">3. === After ReturnFinishedTaskAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-NET-Core-Web-API"><a href="#2-3-NET-Core-Web-API" class="headerlink" title="(2.3).NET Core Web API"></a>(2.3).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.3 =====</span><br><span class="line">1. === Before ReturnFinishedTaskAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2.   === Begin MethodWithFinishedTask ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After ReturnFinishedTaskAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 23</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-連續兩個await呼叫有加ConfigureAwait-false"><a href="#2-4-連續兩個await呼叫有加ConfigureAwait-false" class="headerlink" title="(2.4)連續兩個await呼叫有加ConfigureAwait(false)"></a>(2.4)連續兩個<code>await</code>呼叫有加<code>ConfigureAwait(false)</code></h3><h4 id="2-4-程式碼"><a href="#2-4-程式碼" class="headerlink" title="(2.4)程式碼"></a>(2.4)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_4</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.4 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url).ConfigureAwait(<span class="literal">false</span>); <span class="comment">// with ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url).ConfigureAwait(<span class="literal">false</span>); <span class="comment">// with ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"3. === After httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-執行結果"><a href="#2-4-執行結果" class="headerlink" title="(2.4)執行結果"></a>(2.4)執行結果</h4><p>這邊訊息的2.跟3.有可能會是同一個iocp thread，畢竟我都對同一個URL發HTTP GET，有可能是cache導致<code>Task</code>很快就完成了，或是真的第二個<code>await</code>真的接手的thread跟第一個一樣</p>
+<h5 id="2-4-WPF"><a href="#2-4-WPF" class="headerlink" title="(2.4)WPF"></a>(2.4)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.4 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-4-NET-Core-Web-API"><a href="#2-4-NET-Core-Web-API" class="headerlink" title="(2.4).NET Core Web API"></a>(2.4).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 29</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 15</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.4 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 29</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 15</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 20</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 17</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-先呼叫一個await有加ConfigureAwait-false-，然後再呼叫一個await不加ConfigureAwait-false-？"><a href="#2-5-先呼叫一個await有加ConfigureAwait-false-，然後再呼叫一個await不加ConfigureAwait-false-？" class="headerlink" title="(2.5)先呼叫一個await有加ConfigureAwait(false)，然後再呼叫一個await不加ConfigureAwait(false)？"></a>(2.5)先呼叫一個<code>await</code>有加<code>ConfigureAwait(false)</code>，然後再呼叫一個<code>await</code>不加<code>ConfigureAwait(false)</code>？</h3><h4 id="2-5-程式碼"><a href="#2-5-程式碼" class="headerlink" title="(2.5)程式碼"></a>(2.5)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_5</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.5 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url).ConfigureAwait(<span class="literal">false</span>); <span class="comment">// with ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> httpClient.GetStringAsync(url); <span class="comment">// without ConfigureAwait(false)</span></span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"3. === After httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-5-執行結果"><a href="#2-5-執行結果" class="headerlink" title="(2.5)執行結果"></a>(2.5)執行結果</h4><p>WPF的第一個<code>httpClient.GetStringAsync</code>有加<code>ConfigureAwait(false)</code>，所以<code>await</code>接手的會是iocp thread，可以看到2.的訊息顯示沒有<code>SynchronizationContext</code>，所以第二個<code>httpClient.GetStringAsync</code>即使沒有加<code>ConfigureAwait(false)</code>，後續的code也不會是main thread</p>
+<h5 id="2-5-WPF"><a href="#2-5-WPF" class="headerlink" title="(2.5)WPF"></a>(2.5)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 20</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.5 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 20</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 11</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-5-NET-Core-Web-API"><a href="#2-5-NET-Core-Web-API" class="headerlink" title="(2.5).NET Core Web API"></a>(2.5).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.5 =====</span><br><span class="line">1. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-外面的沒加ConfigureAwait-false-，裡面的有加"><a href="#2-6-外面的沒加ConfigureAwait-false-，裡面的有加" class="headerlink" title="(2.6)外面的沒加ConfigureAwait(false)，裡面的有加"></a>(2.6)外面的沒加<code>ConfigureAwait(false)</code>，裡面的有加</h3><h4 id="2-6-程式碼"><a href="#2-6-程式碼" class="headerlink" title="(2.6)程式碼"></a>(2.6)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_6</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.6 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before MethodWithConfigureAwaitFalseInsideAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> MethodWithConfigureAwaitFalseInsideAsync();</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"4. === After MethodWithConfigureAwaitFalseInsideAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task&lt;<span class="keyword">string</span>&gt; <span class="title">MethodWithConfigureAwaitFalseInsideAsync</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === Before httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> httpClient.GetStringAsync(url).ConfigureAwait(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"3. === After httpClient.GetStringAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-6-執行結果"><a href="#2-6-執行結果" class="headerlink" title="(2.6)執行結果"></a>(2.6)執行結果</h4><p>在外層WPF因為有<code>SynchronizationContext</code>所以<code>await</code>後續還是main thread，.NET Core沒有<code>SynchronizationContext</code>所以裡面最後是iocp thread，外層也是iocp thread繼續 </p>
+<h5 id="2-6-WPF"><a href="#2-6-WPF" class="headerlink" title="(2.6)WPF"></a>(2.6)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.6 =====</span><br><span class="line">1. === Before MethodWithConfigureAwaitFalseInsideAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === Before httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">3. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 11</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">4. === After MethodWithConfigureAwaitFalseInsideAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 28</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-6-NET-Core-Web-API"><a href="#2-6-NET-Core-Web-API" class="headerlink" title="(2.6).NET Core Web API"></a>(2.6).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 29</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.6 =====</span><br><span class="line">1. === Before MethodWithConfigureAwaitFalseInsideAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 29</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === Before httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 29</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 16</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">4. === After MethodWithConfigureAwaitFalseInsideAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 30</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 16</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-外面的有加ConfigureAwait-false-，裡面的沒加"><a href="#2-7-外面的有加ConfigureAwait-false-，裡面的沒加" class="headerlink" title="(2.7)外面的有加ConfigureAwait(false)，裡面的沒加"></a>(2.7)外面的有加<code>ConfigureAwait(false)</code>，裡面的沒加</h3><h4 id="2-7-程式碼"><a href="#2-7-程式碼" class="headerlink" title="(2.7)程式碼"></a>(2.7)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest2_7</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 2.7 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> MethodWithoutConfigureAwaitFalseInsideAsync().ConfigureAwait(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"4. === After MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task&lt;<span class="keyword">string</span>&gt; <span class="title">MethodWithoutConfigureAwaitFalseInsideAsync</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === Before httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> httpClient.GetStringAsync(url);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"3. === After httpClient.GetStringAsync ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-7-執行結果"><a href="#2-7-執行結果" class="headerlink" title="(2.7)執行結果"></a>(2.7)執行結果</h4><p>WPF因為裡面的沒加<code>ConfigureAwait(false)</code>，所以<code>await</code>後續接手會是main thread，裡面最後執行完的是main thread，外層的有加<code>ConfigureAwait(false)</code>，不交由main thread執行<code>ConfigureAwait(false)</code>的後續，所以由worker thread接手</p>
+<h5 id="2-7-WPF"><a href="#2-7-WPF" class="headerlink" title="(2.7)WPF"></a>(2.7)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 2.7 =====</span><br><span class="line">1. === Before MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">3. === After httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 28</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">4. === After MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 28</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 5</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-7-NET-Core-Web-API"><a href="#2-7-NET-Core-Web-API" class="headerlink" title="(2.7).NET Core Web API"></a>(2.7).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 31</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 2.7 =====</span><br><span class="line">1. === Before MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 31</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === Before httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 31</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 9</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">3. === After httpClient.GetStringAsync ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 32</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">4. === After MethodWithoutConfigureAwaitFalseInsideAsync ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 1, Total threads: 32</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 12</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h2 id="測試三：承測試二，如果不跑在IO相關的task，而跑在Task-Delay上，後續執行緒是？"><a href="#測試三：承測試二，如果不跑在IO相關的task，而跑在Task-Delay上，後續執行緒是？" class="headerlink" title="測試三：承測試二，如果不跑在IO相關的task，而跑在Task.Delay上，後續執行緒是？"></a>測試三：承測試二，如果不跑在IO相關的task，而跑在<code>Task.Delay</code>上，後續執行緒是？</h2><h3 id="3-1-不加ConfigureAwait-false"><a href="#3-1-不加ConfigureAwait-false" class="headerlink" title="(3.1)不加ConfigureAwait(false)"></a>(3.1)不加<code>ConfigureAwait(false)</code></h3><h4 id="3-1-程式碼"><a href="#3-1-程式碼" class="headerlink" title="(3.1)程式碼"></a>(3.1)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest3_1</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 3.1 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before Task.Delay ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After Task.Delay ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-執行結果"><a href="#3-1-執行結果" class="headerlink" title="(3.1)執行結果"></a>(3.1)執行結果</h4><h5 id="3-1-WPF"><a href="#3-1-WPF" class="headerlink" title="(3.1)WPF"></a>(3.1)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 18</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 3.1 =====</span><br><span class="line">1. === Before Task.Delay ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 18</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After Task.Delay ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 20</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-1-NET-Core-Web-API"><a href="#3-1-NET-Core-Web-API" class="headerlink" title="(3.1).NET Core Web API"></a>(3.1).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 3.1 =====</span><br><span class="line">1. === Before Task.Delay ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After Task.Delay ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-加ConfigureAwait-false"><a href="#3-2-加ConfigureAwait-false" class="headerlink" title="(3.2)加ConfigureAwait(false)"></a>(3.2)加<code>ConfigureAwait(false)</code></h3><h4 id="3-2-程式碼"><a href="#3-2-程式碼" class="headerlink" title="(3.2)程式碼"></a>(3.2)程式碼</h4><figure class="highlight csharp"><figcaption><span>C#</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> Task <span class="title">RunTest3_2</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Debug.WriteLine(<span class="string">"===== Test 3.2 ====="</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"1. === Before Task.Delay ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>).ConfigureAwait(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    Debug.WriteLine(<span class="string">"2. === After Task.Delay ConfigureAwait(false) ==="</span>);</span><br><span class="line">    PrintInfos();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-執行結果"><a href="#3-2-執行結果" class="headerlink" title="(3.2)執行結果"></a>(3.2)執行結果</h4><h5 id="3-2-WPF"><a href="#3-2-WPF" class="headerlink" title="(3.2)WPF"></a>(3.2)WPF</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">===== Test 3.2 =====</span><br><span class="line">1. === Before Task.Delay ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 0, Completion port threads: 0, Total threads: 19</span><br><span class="line">     SynchronizationContext: System.Windows.Threading.DispatcherSynchronizationContext</span><br><span class="line">     ManagedThreadId: 1</span><br><span class="line">     IsThreadPoolThread: False</span><br><span class="line">2. === After Task.Delay ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 21</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 5</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-2-NET-Core-Web-API"><a href="#3-2-NET-Core-Web-API" class="headerlink" title="(3.2).NET Core Web API"></a>(3.2).NET Core Web API</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">===== Current Thread Info (in TestStart method) =====</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">===== Test 3.2 =====</span><br><span class="line">1. === Before Task.Delay ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br><span class="line">2. === After Task.Delay ConfigureAwait(false) ===</span><br><span class="line">  -- Worker threads: 1, Completion port threads: 0, Total threads: 25</span><br><span class="line">     SynchronizationContext: </span><br><span class="line">     ManagedThreadId: 10</span><br><span class="line">     IsThreadPoolThread: True</span><br></pre></td></tr></table></figure>
+
+<h2 id="程式碼source-code"><a href="#程式碼source-code" class="headerlink" title="程式碼source code"></a>程式碼source code</h2><p><a href="https://github.com/ThisWayne/csharp-lab" target="_blank" rel="noopener">csharp-lab</a></p>
+
+    </div>
+
+    
+    
+    
+      <div>
+        
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>This Wayne</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://thiswayne.github.io/posts/csharp-async-await-note-2/" title="C#的Async & Await筆記(2)">https://thiswayne.github.io/posts/csharp-async-await-note-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/C/" rel="tag"># C#</a>
+          
+            <a href="/tags/async-await/" rel="tag"># async&await</a>
+          
+        </div>
+        <div class="post-widgets">
+        
+
+        
+
+        
+          <div class="social-share">
+            
+              
+
+
+<div class="likely">
+    <div class="twitter">Tweet</div>
+    <div class="facebook">Share</div>
+    <div class="telegram">Send</div>
+    <div class="whatsapp">Send</div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.js"></script>
+
+
+            
+            
+          </div>
+        
+        </div>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/posts/general-software-development-process/" rel="next" title="軟體開發建構筆記">
+                <i class="fa fa-chevron-left"></i> 軟體開發建構筆記
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/posts/book-note-the-effective-engineer/" rel="prev" title="The Effective Engineer閱讀筆記">
+                The Effective Engineer閱讀筆記 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">This Wayne</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/ThisWayne" title="GitHub &rarr; https://github.com/ThisWayne" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/wayne.chang.taipei" title="Facebook &rarr; https://www.facebook.com/wayne.chang.taipei" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>Facebook</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.linkedin.com/in/chewei/" title="LinkedIn &rarr; https://www.linkedin.com/in/chewei/" rel="noopener" target="_blank"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TL-DR，執行緒調用方式"><span class="nav-text">TL;DR，執行緒調用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#執行環境"><span class="nav-text">執行環境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬體"><span class="nav-text">硬體</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#測試的project類型與target-framework"><span class="nav-text">測試的project類型與target framework</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試方式"><span class="nav-text">測試方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試一：執行續一遇到await就返回呼叫端？"><span class="nav-text">測試一：執行續一遇到await就返回呼叫端？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-程式碼"><span class="nav-text">(1)程式碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-執行結果"><span class="nav-text">(1)執行結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試二：await加不加ConfigureAwait-false-會發生什麼事，後續執行緒是？"><span class="nav-text">測試二：await加不加ConfigureAwait(false)會發生什麼事，後續執行緒是？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-不加ConfigureAwait-false"><span class="nav-text">(2.1)不加ConfigureAwait(false)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-程式碼"><span class="nav-text">(2.1)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-執行結果"><span class="nav-text">(2.1)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-WPF"><span class="nav-text">(2.1)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-NET-Core-Web-API"><span class="nav-text">(2.1).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-加ConfigureAwait-false"><span class="nav-text">(2.2)加ConfigureAwait(false)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-程式碼"><span class="nav-text">(2.2)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-執行結果"><span class="nav-text">(2.2)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-WPF"><span class="nav-text">(2.2)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-NET-Core-Web-API"><span class="nav-text">(2.2).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-加ConfigureAwait-false-後面一定會是iocp-thread？"><span class="nav-text">(2.3)加ConfigureAwait(false)後面一定會是iocp thread？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-程式碼"><span class="nav-text">(2.3)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-執行結果"><span class="nav-text">(2.3)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-WPF"><span class="nav-text">(2.3)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-NET-Core-Web-API"><span class="nav-text">(2.3).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-連續兩個await呼叫有加ConfigureAwait-false"><span class="nav-text">(2.4)連續兩個await呼叫有加ConfigureAwait(false)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-程式碼"><span class="nav-text">(2.4)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-執行結果"><span class="nav-text">(2.4)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-WPF"><span class="nav-text">(2.4)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-NET-Core-Web-API"><span class="nav-text">(2.4).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-先呼叫一個await有加ConfigureAwait-false-，然後再呼叫一個await不加ConfigureAwait-false-？"><span class="nav-text">(2.5)先呼叫一個await有加ConfigureAwait(false)，然後再呼叫一個await不加ConfigureAwait(false)？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-程式碼"><span class="nav-text">(2.5)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-執行結果"><span class="nav-text">(2.5)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-WPF"><span class="nav-text">(2.5)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-NET-Core-Web-API"><span class="nav-text">(2.5).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-外面的沒加ConfigureAwait-false-，裡面的有加"><span class="nav-text">(2.6)外面的沒加ConfigureAwait(false)，裡面的有加</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-程式碼"><span class="nav-text">(2.6)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-執行結果"><span class="nav-text">(2.6)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-WPF"><span class="nav-text">(2.6)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-NET-Core-Web-API"><span class="nav-text">(2.6).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-外面的有加ConfigureAwait-false-，裡面的沒加"><span class="nav-text">(2.7)外面的有加ConfigureAwait(false)，裡面的沒加</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-程式碼"><span class="nav-text">(2.7)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-執行結果"><span class="nav-text">(2.7)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-7-WPF"><span class="nav-text">(2.7)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-7-NET-Core-Web-API"><span class="nav-text">(2.7).NET Core Web API</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試三：承測試二，如果不跑在IO相關的task，而跑在Task-Delay上，後續執行緒是？"><span class="nav-text">測試三：承測試二，如果不跑在IO相關的task，而跑在Task.Delay上，後續執行緒是？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-不加ConfigureAwait-false"><span class="nav-text">(3.1)不加ConfigureAwait(false)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-程式碼"><span class="nav-text">(3.1)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-執行結果"><span class="nav-text">(3.1)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-WPF"><span class="nav-text">(3.1)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-NET-Core-Web-API"><span class="nav-text">(3.1).NET Core Web API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-加ConfigureAwait-false"><span class="nav-text">(3.2)加ConfigureAwait(false)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-程式碼"><span class="nav-text">(3.2)程式碼</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-執行結果"><span class="nav-text">(3.2)執行結果</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-WPF"><span class="nav-text">(3.2)WPF</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-NET-Core-Web-API"><span class="nav-text">(3.2).NET Core Web API</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程式碼source-code"><span class="nav-text">程式碼source code</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">This Wayne</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  <script src="/js/utils.js?v=7.3.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.3.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://thiswayne.github.io/posts/csharp-async-await-note-2/";
+    this.page.identifier = "posts/csharp-async-await-note-2/";
+    this.page.title = 'C#的Async & Await筆記(2)';};
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+</body>
+</html>

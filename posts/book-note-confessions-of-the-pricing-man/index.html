@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/uploads/logo.png?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: 'search.xml'
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    }
+  };
+</script>
+
+  <meta name="description" content="個人的全書總結，整本書從不同面相探討訂價與獲利：  從訂價應以買家認知到的價值出發，訂出符合該價值的價格，但書中並不探討價值怎麼算成價格 從了解買家可能有的心理效應，賣家可以從中有更多獲利，書中探討多種不同的買家心理因素，蠻有趣的 從「總獲利 = (價格 * 銷量) - (變動成本+固定成本)」出發來討論訂價如何影響獲利，書中舉出很多例子，簡單的數學運算，蠻有趣 從理論上價格的調整會和銷量成反比的">
+<meta name="keywords" content="Reading,Commerce,Pricing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="精準訂價閱讀筆記">
+<meta property="og:url" content="https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/index.html">
+<meta property="og:site_name" content="This Wayne">
+<meta property="og:description" content="個人的全書總結，整本書從不同面相探討訂價與獲利：  從訂價應以買家認知到的價值出發，訂出符合該價值的價格，但書中並不探討價值怎麼算成價格 從了解買家可能有的心理效應，賣家可以從中有更多獲利，書中探討多種不同的買家心理因素，蠻有趣的 從「總獲利 = (價格 * 銷量) - (變動成本+固定成本)」出發來討論訂價如何影響獲利，書中舉出很多例子，簡單的數學運算，蠻有趣 從理論上價格的調整會和銷量成反比的">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2022-12-04T09:14:49.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="精準訂價閱讀筆記">
+<meta name="twitter:description" content="個人的全書總結，整本書從不同面相探討訂價與獲利：  從訂價應以買家認知到的價值出發，訂出符合該價值的價格，但書中並不探討價值怎麼算成價格 從了解買家可能有的心理效應，賣家可以從中有更多獲利，書中探討多種不同的買家心理因素，蠻有趣的 從「總獲利 = (價格 * 銷量) - (變動成本+固定成本)」出發來討論訂價如何影響獲利，書中舉出很多例子，簡單的數學運算，蠻有趣 從理論上價格的調整會和銷量成反比的">
+  <link rel="alternate" href="/atom.xml" title="This Wayne" type="application/atom+xml">
+  <link rel="canonical" href="https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>精準訂價閱讀筆記 | This Wayne</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146129627-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-146129627-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">This Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-search">
+          <a href="javascript:;" class="popup-trigger">
+          
+            <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+    </div>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="This Wayne">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="This Wayne">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">精準訂價閱讀筆記
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-11-16 15:25:53" itemprop="dateCreated datePublished" datetime="2019-11-16T15:25:53+00:00">2019-11-16</time>
+            </span>
+          
+
+          
+            
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="fa fa-comment-o"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Comments: </span>
+    
+  
+    <a href="/posts/book-note-confessions-of-the-pricing-man/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/book-note-confessions-of-the-pricing-man/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          <br>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>個人的全書總結，整本書從不同面相探討訂價與獲利：</p>
+<ol>
+<li>從訂價應以買家認知到的價值出發，訂出符合該價值的價格，但書中並不探討價值怎麼算成價格</li>
+<li>從了解買家可能有的心理效應，賣家可以從中有更多獲利，書中探討多種不同的買家心理因素，蠻有趣的</li>
+<li>從「總獲利 = (價格 * 銷量) - (變動成本+固定成本)」出發來討論訂價如何影響獲利，書中舉出很多例子，簡單的數學運算，蠻有趣</li>
+<li>從理論上價格的調整會和銷量成反比的關係出發，鼓勵賣家找到最適當價格來最大化總獲利而不是營收，但如何知道價格與銷量將會呈什麼樣程度的反比並沒有太多解釋</li>
+</ol>
+<p>整本書有些地方並沒有探討得太深，對訂價、控管獲利、行銷有興趣的我覺得可以讀。</p>
+<a id="more"></a>
+
+<h2 id="買家心理"><a href="#買家心理" class="headerlink" title="買家心理"></a>買家心理</h2><h3 id="寧可在價格上受騙，不要在品質上受騙"><a href="#寧可在價格上受騙，不要在品質上受騙" class="headerlink" title="寧可在價格上受騙，不要在品質上受騙"></a>寧可在價格上受騙，不要在品質上受騙</h3><p>價格太貴，隨著使用時間久了，負面感受可以消失，但是品質不好，用起來就感受一直不好</p>
+<h3 id="買家會把價格當做主要或唯一標準的情況"><a href="#買家會把價格當做主要或唯一標準的情況" class="headerlink" title="買家會把價格當做主要或唯一標準的情況"></a>買家會把價格當做主要或唯一標準的情況</h3><p>買家對商品的真正品質感覺到不確定時，或面對一個完全不了解或很少購買的商品，比方說鎖頭，或是修理水電等等，這種情況可把產品組合重新配置，做出更高或更低的產品與價格差異</p>
+<h3 id="價格的定錨效應"><a href="#價格的定錨效應" class="headerlink" title="價格的定錨效應"></a>價格的定錨效應</h3><p>當買家沒有評估產品的知識或工具，各種來源的資訊就會變成買家心中價格的基準，如果賣家先介紹高價的商品，買家可能就會對各種功能大致要花費多少價格有較高的基準</p>
+<h3 id="中間價格"><a href="#中間價格" class="headerlink" title="中間價格"></a>中間價格</h3><p>同樣是發生在買家沒有評估產品的足夠知識或工具，有三種價格的情況，最低價的怕品質差，最高價又覺得可能超出需求導致花費過高，最後選擇中間價格的產品。<br>如果本來只有賣50元與80元的產品，多賣一個120元的產品可能會導致原先可能選擇50元產品的買家改選擇80元產品，即使120元的產品銷量不一定很好，可能沒有直接的因銷量提升營收，但可能間接的提升了總體買家平均花費，沒有什麼人買的高價商品還是有其價值</p>
+<h3 id="提供額外的選擇提升銷售"><a href="#提供額外的選擇提升銷售" class="headerlink" title="提供額外的選擇提升銷售"></a>提供額外的選擇提升銷售</h3><p>兩種產品組合：<br>A：</p>
+<table>
+<thead>
+<tr>
+<th>甲產品</th>
+<th>乙產品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>15</td>
+</tr>
+</tbody></table>
+<p>兩種選擇的人數差不多</p>
+<p>B：</p>
+<table>
+<thead>
+<tr>
+<th>甲產品</th>
+<th>乙產品</th>
+<th>甲+乙產品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>15</td>
+<td>15</td>
+</tr>
+</tbody></table>
+<p>大多數的人會選擇第三種選擇</p>
+<p>用B的產品組合可以提升總體買家平均花費，而且實際上可能很多買家根本用不到乙產品</p>
+<h3 id="價格門檻與尾數9的說法"><a href="#價格門檻與尾數9的說法" class="headerlink" title="價格門檻與尾數9的說法"></a>價格門檻與尾數9的說法</h3><p>有一種理論說，價格到一個數字過一個門檻即會影響銷量，而且通常是整數，為了最大化獲利，所以可能會有99.9元這種價格，還有一種說法是人的閱讀是從左至右，心理上對數字的感受愈右邊愈減弱，或是尾數是9已有特價或折扣的心理效應</p>
+<h3 id="展望理論"><a href="#展望理論" class="headerlink" title="展望理論"></a>展望理論</h3><p>同樣是得到100元與損失100元，心理上得到100元的效用可能是+1，但損失100元的效用可能是-3<br>同樣的金額，信用卡會減少負效用的程度<br>同樣的金額，75元用100元打75折可以減少負效用<br>同樣的金額，$符號或元的放在價錢的最右邊或是不顯示，比較不意識到數字是價格，也有可能減少負效用<br>同樣的金額，如果是在健身房，用年繳可能會比較便宜，但是按月繳可能會更有提醒自己繳錢的事實而提高使用率<br>同樣的金額，現金回饋分月給的正效用可能比一年一次給的正效用高<br>同樣的金額，不同的情境可能有不同的做法有最大效用</p>
+<h2 id="訂價策略"><a href="#訂價策略" class="headerlink" title="訂價策略"></a>訂價策略</h2><h3 id="同質產品中，一線品牌面對競爭對手的低價"><a href="#同質產品中，一線品牌面對競爭對手的低價" class="headerlink" title="同質產品中，一線品牌面對競爭對手的低價"></a>同質產品中，一線品牌面對競爭對手的低價</h3><p>不以生產更便宜的產品，為降低公司內同質產品的互相競爭，通常會以另一個二線品牌來賣低價產品</p>
+<h3 id="低價成功因素"><a href="#低價成功因素" class="headerlink" title="低價成功因素"></a>低價成功因素</h3><p>一開始就低價、經營有效率、仍有一定且穩定品質、只關注核心需求提供必需品、高成長高營收、採購強、少負債、掌控更多的事情、廣告聚焦價格、清楚定位、成本優勢</p>
+<h3 id="高價成功因素"><a href="#高價成功因素" class="headerlink" title="高價成功因素"></a>高價成功因素</h3><p>優異的價值、客觀的高價值、高且穩定品質、廣告聚焦高價值（買家認知到的高價值才願意付出高價）、避免促銷</p>
+<h3 id="奢侈品成功因素"><a href="#奢侈品成功因素" class="headerlink" title="奢侈品成功因素"></a>奢侈品成功因素</h3><p>所有面向最好的產品性能、品牌形象、有限的產量與市占率、嚴格避免折扣或類似行為（損害產品剩餘價值、品牌）、掌控價值鏈</p>
+<h2 id="價格影響獲利"><a href="#價格影響獲利" class="headerlink" title="價格影響獲利"></a>價格影響獲利</h2><h3 id="營收-價格-銷量，總獲利-營收-成本"><a href="#營收-價格-銷量，總獲利-營收-成本" class="headerlink" title="營收 = 價格 * 銷量，總獲利 = 營收-成本"></a>營收 = 價格 * 銷量，總獲利 = 營收-成本</h3><p>獲利三要素： 價格，銷量，成本</p>
+<h3 id="理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然"><a href="#理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然" class="headerlink" title="理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然"></a>理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然</h3><p>最適當的價格，即是獲利最大的時候，也就是「價格 * 銷量 - 成本」最大的時候</p>
+<h3 id="降低價格期望銷售提升，要大量的提升才能維持獲利"><a href="#降低價格期望銷售提升，要大量的提升才能維持獲利" class="headerlink" title="降低價格期望銷售提升，要大量的提升才能維持獲利"></a>降低價格期望銷售提升，要大量的提升才能維持獲利</h3><p>例：<br>價格100元 * 銷量100萬 = 營收10,000萬元<br>若變動成本（隨著賣出的產品數量會變動的成本，如原物料，假設為40元）40元 * 100萬 = 變動成本4,000萬元<br>若固定成本（賣出多少個產品也不影響的成本，如店租）= 3,000萬元<br>獲利 = 營收10,000萬元 - 變動成本4,000萬元 - 固定成本3,000萬元 = 3,000萬元</p>
+<p>若價格降20%，100 * 20% = 80元，要維持一樣的獲利，要達到銷量x萬<br>價格80元 * 銷量x萬 = 營收80x萬元<br>變動成本一樣40元 * 銷量x萬 = 變動成本40x萬元<br>固定成本一樣3,000萬元<br>獲利要維持3,000萬元 = 營收80x萬元 - 變動成本40x萬元 - 固定成本3,000萬元<br>40x = 6000, x = 150<br>價格降20%銷量要增加50%，否則就是獲利下降<br>重點要是獲利而不是營收</p>
+<h3 id="折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義"><a href="#折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義" class="headerlink" title="折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義"></a>折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義</h3><p>比方說買一送一，萬一本來就有兩個人要買，變成兩個人合購<br>比方說買家未來才打算買的東西，且不是經常性需要一直買的產品，像是汽車，因為折扣而提早買，就只是跟未來借銷量<br>比方說該時段可能本身就不太會有買家，折價且沒有透過宣傳讓更多的人知道</p>
+<h3 id="囚犯理論與價格戰，各賣家的漲價與降價"><a href="#囚犯理論與價格戰，各賣家的漲價與降價" class="headerlink" title="囚犯理論與價格戰，各賣家的漲價與降價"></a>囚犯理論與價格戰，各賣家的漲價與降價</h3><p>如果一方降價，另一方也降價，引發價格戰導致雙方獲利都下降<br>如果一方漲價，另一方不漲價，可能導致銷售下降<br>協商一同漲價通常是違法的<br>漲價與降價，了解對手的反應非常重要，理想的狀況是提前發出公布訊息，表示漲價降價理由，或是表示是否會跟進對手的漲價或降價，嚇阻價格戰</p>
+<h2 id="訂價方式"><a href="#訂價方式" class="headerlink" title="訂價方式"></a>訂價方式</h2><h3 id="不理會產品價值與市場的自我訂價"><a href="#不理會產品價值與市場的自我訂價" class="headerlink" title="不理會產品價值與市場的自我訂價"></a>不理會產品價值與市場的自我訂價</h3><p>訂價 = 單看生產一個產品要多少成本 + 一定比例的獲利空間<br>優點是方式簡單，如果競爭對手也這樣訂價，就會儘量避免價格戰影響獲利<br>缺點是不理會買家認知的價值，有可能訂價太高或太低導致獲利不佳</p>
+<h3 id="損益兩平的銷量"><a href="#損益兩平的銷量" class="headerlink" title="損益兩平的銷量"></a>損益兩平的銷量</h3><p>損益兩平的銷量 = 固定成本 / (價格 - 變動成本)<br>可以算出銷量要到多少才開始賺錢<br>去調整價格看銷量的變化，以及是否價格有可能達到這樣的銷量</p>
+<h3 id="組合訂價"><a href="#組合訂價" class="headerlink" title="組合訂價"></a>組合訂價</h3><p>如果知道不同消費者在不同產品所願意付出的最高價格</p>
+<table>
+<thead>
+<tr>
+<th>消費者</th>
+<th>葡萄酒</th>
+<th>起司</th>
+<th>葡萄酒+起司的組合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>5</td>
+<td>2</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>9</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2.5</td>
+<td>3</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1.8</td>
+<td>2.4</td>
+<td>4.2</td>
+</tr>
+</tbody></table>
+<p>假設變動成本為0<br>單看葡萄酒與起司，價格訂為葡萄酒4和起司5，消費者23會買葡萄酒，消費者13會買起司，獲利為4 * 2 + 5 * 2 = 18<br>若只提供組合，價格訂為5.5，消費者1234會買組合，獲利5.5 * 4 = 22<br>即使商品總價較低，但仍獲利較高<br>若提供混合的訂價<br>組合訂價5.5，葡萄酒4，起司2.4，消費者1234會買組合，消費者5會購買起司，總獲利22 + 2.4 = 24.4</p>
+<h3 id="分拆訂價仍可以考慮"><a href="#分拆訂價仍可以考慮" class="headerlink" title="分拆訂價仍可以考慮"></a>分拆訂價仍可以考慮</h3><p>單獨賣一個商品就是一個市場的時候<br>零組件標準化，顧客可以自行搭配<br>例如機票把行李費拆開</p>
+<h3 id="不同數量不同訂價"><a href="#不同數量不同訂價" class="headerlink" title="不同數量不同訂價"></a>不同數量不同訂價</h3><p>買家對產品數量的需求可能是第一個正效用最高，然後數量增加正效用遞減，依照不同數量最大化效用訂出買家仍願意購買的價格<br>比如啤酒對買家產生的正效用，可能會隨著杯數減少、價格也可以愈多杯愈便宜，最大化總效用，最大化獲利，前提是不同買家不能彼此share啤酒就是了</p>
+<h3 id="按使用情況付費，賣服務，需求導向思維"><a href="#按使用情況付費，賣服務，需求導向思維" class="headerlink" title="按使用情況付費，賣服務，需求導向思維"></a>按使用情況付費，賣服務，需求導向思維</h3><p>輪胎的例子，壽命延長了25%但是要在價格上漲25%非常困難<br>卡車改按照使用的里程數收費，輪胎壽命延長了25%自然的就多收了25%的價格，可以鼓勵輪胎的進步，而使用者也只有使用的時候才付費，如果運輸需求低，不使用也就沒有費用</p>
+<h3 id="將免費的服務收費"><a href="#將免費的服務收費" class="headerlink" title="將免費的服務收費"></a>將免費的服務收費</h3><p>例子是免費使用的廁所，解決方案稱Sanifair，德國高速公路休息區原由政府負責，之後改民營Task &amp; Rast接下經營，將廁所翻新並收費0.5歐元，成人付全額才可通過一旋轉門，小孩及殘障人士會有一個代幣可免費進入，付的0.5歐元可得到一購物券，可以在休息區的各個地方使用，將免費來上廁所跟有買東西的人區隔出來，有買東西的人仍然算是可以免費上，之後價格變成了0.7歐元，0.5歐元的購物券</p>
+<h3 id="免費與增值的價格"><a href="#免費與增值的價格" class="headerlink" title="免費與增值的價格"></a>免費與增值的價格</h3><p>如skype、linkedin等，有免費的方案，也有premium的方案<br>透過免費讓買家體驗產品，傳遞產品價值給買家：</p>
+<ol>
+<li>要有吸引力的基本服務，帶來大量的用戶</li>
+<li>免費跟升級有明確區隔</li>
+</ol>
+<p>基本服務就很足夠會沒有人升級，基本服務不夠吸引人會沒有人來用</p>
+<h3 id="顧客導向訂價"><a href="#顧客導向訂價" class="headerlink" title="顧客導向訂價"></a>顧客導向訂價</h3><p>讓顧客自行表示願意購買的最高訂價<br>但可能最後會有一堆不切實際的超低價，只能拿來清庫存<br>但也有可能處理得好，就可以得知價格漲跌與銷量起伏的關係<br>像是APP設定美金多少錢提醒，那銀行就可以知道匯率到多少的時候可能會有多少人買，如果銀行希望你買，甚至可以給個別的價格</p>
+<h3 id="拍賣"><a href="#拍賣" class="headerlink" title="拍賣"></a>拍賣</h3><p>有機會以買家最高的價格賣出，比方說ebay、google的廣告刊登競標</p>
+
+    </div>
+
+    
+    
+    
+      <div>
+        
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>This Wayne</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/" title="精準訂價閱讀筆記">https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/Reading/" rel="tag"># Reading</a>
+          
+            <a href="/tags/Commerce/" rel="tag"># Commerce</a>
+          
+            <a href="/tags/Pricing/" rel="tag"># Pricing</a>
+          
+        </div>
+        <div class="post-widgets">
+        
+
+        
+
+        
+          <div class="social-share">
+            
+              
+
+
+<div class="likely">
+    <div class="twitter">Tweet</div>
+    <div class="facebook">Share</div>
+    <div class="telegram">Send</div>
+    <div class="whatsapp">Send</div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.js"></script>
+
+
+            
+            
+          </div>
+        
+        </div>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/posts/trick-share-and-discuss/" rel="next" title="小技巧分享與交流">
+                <i class="fa fa-chevron-left"></i> 小技巧分享與交流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/posts/time-gem-youtube-player/" rel="prev" title="Time Gem YouTube player">
+                Time Gem YouTube player <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">This Wayne</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/ThisWayne" title="GitHub &rarr; https://github.com/ThisWayne" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/wayne.chang.taipei" title="Facebook &rarr; https://www.facebook.com/wayne.chang.taipei" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>Facebook</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.linkedin.com/in/chewei/" title="LinkedIn &rarr; https://www.linkedin.com/in/chewei/" rel="noopener" target="_blank"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#買家心理"><span class="nav-text">買家心理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寧可在價格上受騙，不要在品質上受騙"><span class="nav-text">寧可在價格上受騙，不要在品質上受騙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#買家會把價格當做主要或唯一標準的情況"><span class="nav-text">買家會把價格當做主要或唯一標準的情況</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#價格的定錨效應"><span class="nav-text">價格的定錨效應</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中間價格"><span class="nav-text">中間價格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提供額外的選擇提升銷售"><span class="nav-text">提供額外的選擇提升銷售</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#價格門檻與尾數9的說法"><span class="nav-text">價格門檻與尾數9的說法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#展望理論"><span class="nav-text">展望理論</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#訂價策略"><span class="nav-text">訂價策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同質產品中，一線品牌面對競爭對手的低價"><span class="nav-text">同質產品中，一線品牌面對競爭對手的低價</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#低價成功因素"><span class="nav-text">低價成功因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高價成功因素"><span class="nav-text">高價成功因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#奢侈品成功因素"><span class="nav-text">奢侈品成功因素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#價格影響獲利"><span class="nav-text">價格影響獲利</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#營收-價格-銷量，總獲利-營收-成本"><span class="nav-text">營收 = 價格 * 銷量，總獲利 = 營收-成本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然"><span class="nav-text">理論上假想價格與銷量是一條線，價格上升銷量下降，反之亦然</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#降低價格期望銷售提升，要大量的提升才能維持獲利"><span class="nav-text">降低價格期望銷售提升，要大量的提升才能維持獲利</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義"><span class="nav-text">折扣提升出來的銷量要把不會買的變成會買，或是已經要買的買家買的更多才開始有意義</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#囚犯理論與價格戰，各賣家的漲價與降價"><span class="nav-text">囚犯理論與價格戰，各賣家的漲價與降價</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#訂價方式"><span class="nav-text">訂價方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不理會產品價值與市場的自我訂價"><span class="nav-text">不理會產品價值與市場的自我訂價</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#損益兩平的銷量"><span class="nav-text">損益兩平的銷量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#組合訂價"><span class="nav-text">組合訂價</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分拆訂價仍可以考慮"><span class="nav-text">分拆訂價仍可以考慮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同數量不同訂價"><span class="nav-text">不同數量不同訂價</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按使用情況付費，賣服務，需求導向思維"><span class="nav-text">按使用情況付費，賣服務，需求導向思維</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#將免費的服務收費"><span class="nav-text">將免費的服務收費</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#免費與增值的價格"><span class="nav-text">免費與增值的價格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顧客導向訂價"><span class="nav-text">顧客導向訂價</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拍賣"><span class="nav-text">拍賣</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">This Wayne</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  <script src="/js/utils.js?v=7.3.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.3.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://thiswayne.github.io/posts/book-note-confessions-of-the-pricing-man/";
+    this.page.identifier = "posts/book-note-confessions-of-the-pricing-man/";
+    this.page.title = '精準訂價閱讀筆記';};
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+</body>
+</html>

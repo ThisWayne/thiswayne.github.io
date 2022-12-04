@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/uploads/logo.png?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: 'search.xml'
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    }
+  };
+</script>
+
+  <meta name="description" content="蒐集我常用的各種小工具與常用功能的快捷鍵，或是好像比較不為人知的一些小技巧，歡迎分享與交流。">
+<meta name="keywords" content="Tricks,Chrome Tricks,Chrome DevTools Tricks,Chrome Plugin,Visual Studio Plugin,YouTube Tricks">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小技巧分享與交流">
+<meta property="og:url" content="https://thiswayne.github.io/posts/trick-share-and-discuss/index.html">
+<meta property="og:site_name" content="This Wayne">
+<meta property="og:description" content="蒐集我常用的各種小工具與常用功能的快捷鍵，或是好像比較不為人知的一些小技巧，歡迎分享與交流。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/my-browser-bookmarks-icons.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/chrome-run-command.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/chrome-run-command-screenshot.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/chrome-debug.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/chrome-console-table.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/windows-folder-cmd.jpg">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/vs-code-multi-cursor.gif">
+<meta property="og:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/vs-code-bracket-pair-colorizer.jpg">
+<meta property="og:updated_time" content="2022-12-04T09:14:49.203Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小技巧分享與交流">
+<meta name="twitter:description" content="蒐集我常用的各種小工具與常用功能的快捷鍵，或是好像比較不為人知的一些小技巧，歡迎分享與交流。">
+<meta name="twitter:image" content="https://thiswayne.github.io/posts/trick-share-and-discuss/my-browser-bookmarks-icons.jpg">
+  <link rel="alternate" href="/atom.xml" title="This Wayne" type="application/atom+xml">
+  <link rel="canonical" href="https://thiswayne.github.io/posts/trick-share-and-discuss/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>小技巧分享與交流 | This Wayne</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146129627-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-146129627-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">This Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-search">
+          <a href="javascript:;" class="popup-trigger">
+          
+            <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+    </div>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://thiswayne.github.io/posts/trick-share-and-discuss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="This Wayne">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="This Wayne">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">小技巧分享與交流
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-24 02:28:04" itemprop="dateCreated datePublished" datetime="2019-08-24T02:28:04+00:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="fa fa-comment-o"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Comments: </span>
+    
+  
+    <a href="/posts/trick-share-and-discuss/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/trick-share-and-discuss/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          <br>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>蒐集我常用的各種小工具與常用功能的快捷鍵，或是好像比較不為人知的一些小技巧，歡迎分享與交流。</p>
+<a id="more"></a>
+
+<h2 id="Chrome瀏覽器"><a href="#Chrome瀏覽器" class="headerlink" title="Chrome瀏覽器"></a>Chrome瀏覽器</h2><h3 id="1-基本的快捷鍵"><a href="#1-基本的快捷鍵" class="headerlink" title="1. 基本的快捷鍵"></a>1. 基本的快捷鍵</h3><ul>
+<li>關閉分頁： <kbd>ctrl</kbd> + <kbd>w</kbd> 或 <kbd>滑鼠中鍵</kbd>點分頁</li>
+<li>切換分頁： <kbd>ctrl</kbd> + <kbd>tab</kbd>（往右）、<kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>tab</kbd>（往左）</li>
+<li>開新分頁： <kbd>ctrl</kbd> + <kbd>t</kbd></li>
+<li>重新開啟最後關閉的分頁： <kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>t</kbd></li>
+<li>開無痕視窗： <kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>n</kbd></li>
+<li>用當前分頁網址再開一個新的分頁：<kbd>alt</kbd> + <kbd>d</kbd> 然後 <kbd>alt</kbd> + <kbd>enter</kbd> 或 <kbd>滑鼠中鍵</kbd>點重新整理的icon，基本上只要是網址都可以用<kbd>滑鼠中鍵</kbd>，上一頁、下一頁的icon以及書籤的資料夾（一次開多個書籤）都可以</li>
+</ul>
+<h3 id="2-書籤整理"><a href="#2-書籤整理" class="headerlink" title="2. 書籤整理"></a>2. 書籤整理</h3><p>有些常用到爆炸的網站像是：Google Map、字典等等的網站，在書籤上可以編輯名稱，不輸入名字，就會只留icon可以省書籤列空間，資料夾名稱也可以放emoji裝飾，下圖是我的Chrome書籤列XD<br><img src="my-browser-bookmarks-icons.jpg" alt="我的Chrome書籤列XD"></p>
+<h3 id="3-開發人員工具DevTools-不知道怎麼開的上網查一下XD，我最常開的方法是按F12"><a href="#3-開發人員工具DevTools-不知道怎麼開的上網查一下XD，我最常開的方法是按F12" class="headerlink" title="3. 開發人員工具DevTools(不知道怎麼開的上網查一下XD，我最常開的方法是按F12)"></a>3. 開發人員工具DevTools(不知道怎麼開的上網查一下XD，我最常開的方法是按F12)</h3><ul>
+<li>開Run command裡面有更多的功能可以用，快捷鍵： <kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>p</kbd><br><img src="chrome-run-command.jpg" alt="Chrome開Run command"></li>
+<li>在Run command輸入screenshot會搜尋到四種截圖方式：選取部分畫面、全畫面擷取（包含網頁要往下滑才看的到的內容）、一個DOM節點的畫面擷取、當前顯示的畫面擷取<br><img src="chrome-run-command-screenshot.jpg" alt="Chrome開Run command截圖"></li>
+</ul>
+<h3 id="4-Debug"><a href="#4-Debug" class="headerlink" title="4. Debug"></a>4. Debug</h3><ul>
+<li>除了常用的在行數上面點一下會出現中斷點，在行數上面按右鍵可以新增conditional breakpoint、logpoint<br><img src="chrome-debug.jpg" alt="chrome debug"></li>
+<li>有些時候用console.table()印資料來顯示比較方便<br><img src="chrome-console-table.jpg" alt="chrome console table"></li>
+</ul>
+<h3 id="5-Chrome開發相關我平常追蹤的地方"><a href="#5-Chrome開發相關我平常追蹤的地方" class="headerlink" title="5. Chrome開發相關我平常追蹤的地方"></a>5. Chrome開發相關我平常追蹤的地方</h3><p><a href="https://www.youtube.com/user/ChromeDevelopers/" target="_blank" rel="noopener">Google Chrome Developers Youtube Channel</a></p>
+<h3 id="6-外掛"><a href="#6-外掛" class="headerlink" title="6. 外掛"></a>6. 外掛</h3><ul>
+<li><a href="https://chrome.google.com/webstore/detail/streamkeys/ekpipjofdicppbepocohdlgenahaneen" target="_blank" rel="noopener">Streamkeys</a>： 可以設定快捷鍵去操作瀏覽器正在播放的歌（Youtube、Spotify等等），有分成視窗切換到瀏覽器才有效的快捷鍵或是全局不用切換視窗只要有開著瀏覽器就有效的快捷鍵，我需要不用切換畫面就可以直接控制音樂，這樣做事做到一半要換歌或是暫停都不用滑鼠跟切畫面，我習慣用Spotify桌面板，但是桌面板快捷鍵要切換視窗才可以控制音樂，最後方法是用瀏覽器開一個Spotify的分頁，因為Spotify同一帳號不同設備之間都有連動，所以我用Streamkeys控制瀏覽器Spotify分頁的音樂，也會控制到桌面板的Spotify的音樂</li>
+<li><a href="https://chrome.google.com/webstore/detail/marinara-pomodoro%C2%AE-assist/lojgmehidjdhhbmpjfamhpkpodfcodef" target="_blank" rel="noopener">Marinara: Pomodoro® Assistant</a>： 如果你聽過番茄工作法，可以裝這個外掛來輔助，認真想要有效率要專注做事情或是學習的時候我會使用</li>
+</ul>
+<h2 id="Youtube平台"><a href="#Youtube平台" class="headerlink" title="Youtube平台"></a>Youtube平台</h2><h3 id="1-常用快捷鍵"><a href="#1-常用快捷鍵" class="headerlink" title="1. 常用快捷鍵"></a>1. 常用快捷鍵</h3><ul>
+<li>全螢幕： <kbd>f</kbd></li>
+<li>倒帶30秒： <kbd>j</kbd></li>
+<li>快轉30秒： <kbd>l</kbd></li>
+<li>暫停： <kbd>k</kbd></li>
+<li>減速： <kbd>shift</kbd> + <kbd><</kbd></li>
+<li>加速： <kbd>shift</kbd> + <kbd>></kbd></li>
+<li>靜音： <kbd>m</kbd></li>
+<li>字幕： <kbd>shift</kbd> + <kbd>c</kbd></li>
+<li>下一個影片： <kbd>shift</kbd> + <kbd>n</kbd> (next)</li>
+<li>上一個影片： <kbd>shift</kbd> + <kbd>p</kbd> (previous)</li>
+</ul>
+<h3 id="2-自訂影片速度"><a href="#2-自訂影片速度" class="headerlink" title="2. 自訂影片速度"></a>2. 自訂影片速度</h3><p>youtube只提供0.75x跟1x速度，有時候放play-along的歌練習打鼓，但是一開始跟音樂太快的時候可以用這個方法更精細控制速度一點一點的從慢的練習到正常速度： 在瀏覽器DevTools的console裡面輸入</p>
+<figure class="highlight javascript"><figcaption><span>JavaScript</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">'video'</span>).playbackRate <span class="comment">// 顯示現在撥放速度</span></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">'video'</span>).playbackRate = <span class="number">3</span> <span class="comment">// 調整撥放速度為3倍速</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Windows作業系統"><a href="#Windows作業系統" class="headerlink" title="Windows作業系統"></a>Windows作業系統</h2><ul>
+<li><a href="https://docs.microsoft.com/zh-tw/sysinternals/downloads/zoomit" target="_blank" rel="noopener">ZoomIt</a>：微軟官方出的放大螢幕小工具，簡報演講萬一要demo真的有什麼文件無法放大的時候可以用，也可以在螢幕當白板寫字</li>
+<li><a href="https://picpick.app/en/" target="_blank" rel="noopener">PicPick</a>：主要是截圖軟體，可以有多種截圖的方式，也可以在螢幕當白板寫字</li>
+<li>在任一資料夾下，在資料夾路徑輸入cmd可以直接開啟一個command line interface，路徑就是剛才資料夾的路徑，不過權限不是管理員<br><img src="windows-folder-cmd.jpg" alt="在資料夾路徑打cmd直接開cmd"></li>
+</ul>
+<h2 id="Visual-Studio-Code外掛"><a href="#Visual-Studio-Code外掛" class="headerlink" title="Visual Studio Code外掛"></a>Visual Studio Code外掛</h2><ul>
+<li><a href="https://code.visualstudio.com/docs/editor/accessibility" target="_blank" rel="noopener">Zoom放大縮小快捷鍵</a>：<kbd>ctrl</kbd> + <kbd>=</kbd> （放大）、<kbd>ctrl</kbd> + <kbd>-</kbd> （縮小）</li>
+<li><a href="https://code.visualstudio.com/docs/editor/emmet" target="_blank" rel="noopener">Emmet in Visual Studio Code（以前叫Zencoding）</a>：Visual Studio Code已內建，有很多簡便的功能，最基本的像是multi cursor可以按住alt+滑鼠一次多個游標編輯多個地方<br><img src="vs-code-multi-cursor.gif" alt="vs code multi cursor"></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer" target="_blank" rel="noopener">Live Server</a>：如果要編輯html可以直接有一個Go Live按鈕幫你開一個local server即時顯示</li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer" target="_blank" rel="noopener">Bracket Pair Colorizer</a>：幫你把誇號、大誇號同一組用同樣的顏色，不然誇號一連串的話看到眼睛快花了<br><img src="vs-code-bracket-pair-colorizer.jpg" alt="vs code bracket pair colorizer"></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one" target="_blank" rel="noopener">Markdown All in One</a>、<a href="https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles" target="_blank" rel="noopener">Markdown Preview Github</a>、<a href="https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint" target="_blank" rel="noopener">markdownlint</a>：我個人寫markdown有用</li>
+</ul>
+<h2 id="Google-Search關鍵字"><a href="#Google-Search關鍵字" class="headerlink" title="Google Search關鍵字"></a>Google Search關鍵字</h2><p>我最常用的是完全符合關鍵字的「&quot;keyword&quot;」和包含網站「site:xxxx.com」以及排除網站「-site:xxxx.com」</p>
+
+    </div>
+
+    
+    
+    
+      <div>
+        
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>This Wayne</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://thiswayne.github.io/posts/trick-share-and-discuss/" title="小技巧分享與交流">https://thiswayne.github.io/posts/trick-share-and-discuss/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/Tricks/" rel="tag"># Tricks</a>
+          
+            <a href="/tags/Chrome-Tricks/" rel="tag"># Chrome Tricks</a>
+          
+            <a href="/tags/Chrome-DevTools-Tricks/" rel="tag"># Chrome DevTools Tricks</a>
+          
+            <a href="/tags/Chrome-Plugin/" rel="tag"># Chrome Plugin</a>
+          
+            <a href="/tags/Visual-Studio-Plugin/" rel="tag"># Visual Studio Plugin</a>
+          
+            <a href="/tags/YouTube-Tricks/" rel="tag"># YouTube Tricks</a>
+          
+        </div>
+        <div class="post-widgets">
+        
+
+        
+
+        
+          <div class="social-share">
+            
+              
+
+
+<div class="likely">
+    <div class="twitter">Tweet</div>
+    <div class="facebook">Share</div>
+    <div class="telegram">Send</div>
+    <div class="whatsapp">Send</div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.js"></script>
+
+
+            
+            
+          </div>
+        
+        </div>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/posts/csharp-async-await-note/" rel="next" title="C#的Async & Await筆記">
+                <i class="fa fa-chevron-left"></i> C#的Async & Await筆記
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/posts/book-note-confessions-of-the-pricing-man/" rel="prev" title="精準訂價閱讀筆記">
+                精準訂價閱讀筆記 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">This Wayne</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/ThisWayne" title="GitHub &rarr; https://github.com/ThisWayne" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/wayne.chang.taipei" title="Facebook &rarr; https://www.facebook.com/wayne.chang.taipei" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>Facebook</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.linkedin.com/in/chewei/" title="LinkedIn &rarr; https://www.linkedin.com/in/chewei/" rel="noopener" target="_blank"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chrome瀏覽器"><span class="nav-text">Chrome瀏覽器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-基本的快捷鍵"><span class="nav-text">1. 基本的快捷鍵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-書籤整理"><span class="nav-text">2. 書籤整理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-開發人員工具DevTools-不知道怎麼開的上網查一下XD，我最常開的方法是按F12"><span class="nav-text">3. 開發人員工具DevTools(不知道怎麼開的上網查一下XD，我最常開的方法是按F12)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Debug"><span class="nav-text">4. Debug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Chrome開發相關我平常追蹤的地方"><span class="nav-text">5. Chrome開發相關我平常追蹤的地方</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-外掛"><span class="nav-text">6. 外掛</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Youtube平台"><span class="nav-text">Youtube平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-常用快捷鍵"><span class="nav-text">1. 常用快捷鍵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自訂影片速度"><span class="nav-text">2. 自訂影片速度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows作業系統"><span class="nav-text">Windows作業系統</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Visual-Studio-Code外掛"><span class="nav-text">Visual Studio Code外掛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Search關鍵字"><span class="nav-text">Google Search關鍵字</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">This Wayne</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  <script src="/js/utils.js?v=7.3.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.3.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://thiswayne.github.io/posts/trick-share-and-discuss/";
+    this.page.identifier = "posts/trick-share-and-discuss/";
+    this.page.title = '小技巧分享與交流';};
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://thiswayne-github-io-1.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+</body>
+</html>
